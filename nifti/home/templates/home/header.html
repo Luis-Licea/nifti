@@ -7,6 +7,8 @@
         <!-- Get the urls for each link in the nav bar. -->
         {% url 'home-home' as home %}
         {% url 'home-about' as about %}
+        {% url 'user-profile' as profile %}
+        {% url 'home-logout' as logout %}
         {% url 'home-login' as login %}
         {% url 'home-register' as register %}
         {% url 'search-home' as search %}
@@ -14,8 +16,13 @@
         <!-- Activate link in nav bar and add aria current for the current page. -->
         <a class="nav-link{% if request.path == home %} active" aria-current="page" {% else %}"{% endif %} href="{{ home }}">Home</a>
         <a class="nav-link{% if request.path == search %} active" aria-current="page" {% else %}"{% endif %} href="{{ search }}">Search</a>
-        <a class="nav-link{% if request.path == login %} active" aria-current="page" {% else %}"{% endif %} href="{{ login }}">Login</a>
-        <a class="nav-link{% if request.path == register %} active" aria-current="page" {% else %}"{% endif %} href="{{ register }}">Register</a>
+        {% if user.is_authenticated %}
+          <a class="nav-link{% if request.path == profile %} active" aria-current="page" {% else %}"{% endif %} href="{{ profile }}">Profile</a>
+          <a class="nav-link{% if request.path == logout %} active" aria-current="page" {% else %}"{% endif %} href="{{ logout }}">Logout</a>
+        {% else %}
+          <a class="nav-link{% if request.path == login %} active" aria-current="page" {% else %}"{% endif %} href="{{ login }}">Login</a>
+          <a class="nav-link{% if request.path == register %} active" aria-current="page" {% else %}"{% endif %} href="{{ register }}">Register</a>
+        {% endif %}
         <a class="nav-link{% if request.path == about %} active" aria-current="page" {% else %}"{% endif %} href="{{ about }}">About</a>
 
       </nav>

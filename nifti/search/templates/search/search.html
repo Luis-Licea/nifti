@@ -11,6 +11,9 @@
 
     <form class="" style="width: 100%; padding: 1.4em; padding-bottom: 0;">
 
+      <!-- Show registration, login, and search messages. -->
+      {% include 'home/messages.html' %}
+
       <!-- Search bar. -->
       <div class="d-flex input-group">
         <input class="form-control" type="search" placeholder="Search" aria-label="Search">
@@ -55,28 +58,31 @@
   <section class="bg-transparent text-black p-4 d-flex justify-content-center w-100">
     <div class="container">
       <div class="row">
-        
+
         <!-- Iterate over every user in the results. -->
         {% for user in users %}
-          {% with user.first|add:' '|add:user.last as username %}
+
+          <!-- Concatenate the first and last name to create the full_name. -->
+          {% with user.first|add:' '|add:user.last as full_name %}
 
           <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
             <div class="row g-0" style="margin-left: 0 !important;">
               <div class="col-md-4">
                 <img
                   src="{{ user.image_url }}"
-                  alt="{{ username }}"
+                  alt="{{ full_name }}"
                   class="img-fluid responsive"
                 />
               </div>
               <div class="col-md-8">
                 <div class="card-body">
                   <!-- <h5 class="card-title">Card title</h5> -->
-                  <h5 class="card-title">{{ username }}</h5>
+                  <h5 class="card-title">{{ full_name }}</h5>
                   <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
 
+                  <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
                   <p class="card-text">
-                    <a href="{{ username }}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                    <a href="{{ user.username }}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
                       {{ user.description|truncatechars:120|default:"Hello, I am new member. Come check my profile!" }}
 
                        <!-- {{ user.description|truncatechars_html:15|safe }} -->

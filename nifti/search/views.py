@@ -4,6 +4,7 @@ from django.shortcuts import render
 def search(request):
   users = [
     {
+      'username': 'Username1',
       'first': 'First1',
       'middle': 'Middle1',
       'last': 'Last1',
@@ -11,6 +12,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
     },
     {
+      'username': 'Username2',
       'first': 'First2',
       'middle': 'Middle2',
       'last': 'Last2',
@@ -18,6 +20,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
     },
     {
+      'username': 'Username3',
       'first': 'First3',
       'middle': 'Middle3',
       'last': 'Last3',
@@ -25,6 +28,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
     },
     {
+      'username': 'Username4',
       'first': 'First4',
       'middle': 'Middle4',
       'last': 'Last4',
@@ -32,6 +36,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
     },
     {
+      'username': 'Username5',
       'first': 'First4',
       'middle': 'Middle4',
       'last': 'Last4',
@@ -39,6 +44,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
     },
     {
+      'username': 'Username6',
       'first': 'First4',
       'middle': 'Middle4',
       'last': 'Last4',
@@ -46,6 +52,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
     },
     {
+      'username': 'Username6',
       'first': 'First4',
       'middle': 'Middle4',
       'last': 'Last4',
@@ -53,6 +60,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
     },
     {
+      'username': 'Username7',
       'first': 'First4',
       'middle': 'Middle4',
       'last': 'Last4',
@@ -60,6 +68,7 @@ def search(request):
       'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
     },
     {
+      'username': 'Username8',
       'first': 'First4',
       'middle': 'Middle4',
       'last': 'Last4',

@@ -35,6 +35,8 @@ ALLOWED_HOSTS = ['*']
 # in the installed apps list.
 
 INSTALLED_APPS = [
+    'ckeditor',
+    'user.apps.UserConfig',
     'search.apps.SearchConfig',
     'home.apps.HomeConfig',
     'django.contrib.admin',
@@ -131,3 +133,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Default page to redirect users after logging in.
+
+LOGIN_REDIRECT_URL = 'user-profile'
+
+# When logging in is required, redirect users to the login page.
+
+LOGIN_URL = 'home-login'

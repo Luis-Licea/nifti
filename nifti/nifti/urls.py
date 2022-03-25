@@ -18,14 +18,17 @@ from django.urls import path
 # Import include function so that we can include urls defined in another app,
 # thus increasing modularity.
 from django.urls import include
-
-from home.views import home, login, register, about
+from django.contrib.auth import views as auth_views
+from home import views as home_views
+from user import views as user_views
 
 urlpatterns = [
-    path('', home, name='home-home'),
-    path('login', login, name='home-login'),
-    path('register', register, name='home-register'),
-    path('about', about, name='home-about'),
+    path('', home_views.home, name='home-home'),
+    path('login', auth_views.LoginView.as_view(template_name='home/login.html'), name='home-login'),
+    path('logout', auth_views.LogoutView.as_view(template_name='home/logout.html'), name='home-logout'),
+    path('profile', user_views.profile, name='user-profile'),
+    path('register', home_views.register, name='home-register'),
+    path('about', home_views.about, name='home-about'),
     path('search/', include('search.urls')),
     path('admin/', admin.site.urls),
 ]
