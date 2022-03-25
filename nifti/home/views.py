@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.contrib.auth import forms, authenticate
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from .forms import UserRegistrationForm
 
 members = [
   # Alex Palmer.
@@ -53,13 +57,30 @@ def about(request):
   return render(request, 'home/about.html', context)
 
 def login(request):
+  messages.success(request, f'Account created for Tommy.')
   context = {
     'title': 'Login',
   }
   return render(request, 'home/login.html', context)
 
 def register(request):
+  if request.method == 'POST':
+    # Create registration form.
+    form = UserRegistrationForm(request.POST)
+    # Validate form.
+    if form.is_valid():
+      # Create user from registration form.
+      form.save()
+      # Get username.
+      username = form.cleaned_data.get('username')
+      # Show message showing registration is successful.
+      messages.success(request, f'Account created for {username}.')
+      # Return user to search page.
+      return redirect('home-login')
+  else:
+    form = UserRegistrationForm()
+
   context = {
-    'title': 'Register',
+    'form':form
   }
   return render(request, 'home/register.html', context)

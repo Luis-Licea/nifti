@@ -2,7 +2,50 @@
 {% block content %}
 
   <div style="margin-bottom: 50%; margin-top: 3em;">
-    <form>
+
+    <form method="post">
+      <div class="card text-black" style="width: 25rem; margin: auto; max-width: fit-content;">
+
+        <h5 class="card-header">Register</h5>
+
+        <!-- Display as grid so button takes entire width. -->
+        <div class="card-body d-grid">
+
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="mb-3">
+              <label for="input{{ field.label }}" class="form-label visually-hidden">{{ field.label_tag }}</label>
+              {{ field }}
+                {% if field.help_text %}
+                <small style="color: grey; margin-bottom: 0;">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <p style="color: red; margin-bottom: 0;">{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-primary">Register</button>
+
+        </div>
+
+      </div>
+    </form>
+
+    <div id="loginHelp" class="form-text">
+      Have an account?
+      <a href="{% url 'home-login' %}">Log In</a>
+    </div>
+  </div>
+
+  {% comment %}
+
+  <div style="margin-bottom: 50%; margin-top: 3em;">
+
+    <!-- Show registration and login messages. -->
+    {% include 'home/messages.html' %}
+
+    <form method="POST">
       <div class="card text-black" style="width: 25rem; margin: auto; max-width: fit-content;">
 
         <h5 class="card-header">Register</h5>
@@ -42,5 +85,6 @@
       <a href="{% url 'home-login' %}">Log In</a>
     </div>
   </div>
+  {% endcomment %}
 
 {% endblock content %}
