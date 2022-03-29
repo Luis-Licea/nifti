@@ -11,13 +11,13 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     #TODO: add feature in frontend preventing entering more than 100 chars
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100,default='Post Title')
 
     # The HTML field containing the website contents.
-    body = RichTextField(blank=True, null=True)
+    body = RichTextField(default='')
 
     #TODO: add feature in frontend preventing entering more than 100 chars
-    adress = models.CharField(max_length=200)
+    adress = models.CharField(max_length=200,default='')
 
     # The date the post was created.
     date_posted = models.DateTimeField(default=timezone.now)
@@ -26,13 +26,11 @@ class Post(models.Model):
     service_provider = models.BooleanField(default=False)
 
 
-#TODO: make a function add_tag() whenever a user submits/creates a post
+#TODO: make a function add_tags() whenever a user submits/creates a post
 '''
-if(tag exist in Tag Table):
-    create new entry in TagToPostTable
-else:
+if(tag not exist in Tag Table):
     create new entry in Tag with the actual tag name
-    create new entry in TagToPostTable 
+create new entry in TagToPostTable 
 '''
 #holds the tag names, works with the TagToPostTable
 class Tag(models.Model):   

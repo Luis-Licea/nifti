@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # in the installed apps list.
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'ckeditor',
     'user.apps.UserConfig',
     'search.apps.SearchConfig',
@@ -124,6 +125,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
 
 # Place static files in static folder. Note: Don't forget to adjust Apache conf
 # file and run `python3 manage.py collectstatic` each time static files change.
