@@ -19,9 +19,13 @@ class Profile(models.Model):
     description = models.CharField(max_length=200, blank=True)
 
     # The HTML field containing the website contents.
-    body = RichTextField(blank=True)
+    body = RichTextField(blank=True,default='')
 
     # The date the profile was created.
     date_posted = models.DateTimeField(default=timezone.now)
 
-    profile_picture = models.FileField(upload_to=None, max_length=254, editable=False, blank=True)
+    profile_picture = models.ImageField(default="deafult.jpg", upload_to="profile_pictures", max_length=254, editable=False, blank=True)
+
+    #when class is printed, more specific
+    def __str__(self):
+        return f'{self.user.username} Profile'
