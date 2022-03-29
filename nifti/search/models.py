@@ -10,12 +10,14 @@ class Post(models.Model):
     # Associates a post to a profile
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # The title of the post
     #TODO: add feature in frontend preventing entering more than 100 chars
     title = models.CharField(max_length=100)
 
     # The HTML field containing the website contents.
     body = RichTextField(blank=True, null=True)
+
+    #TODO: add feature in frontend preventing entering more than 100 chars
+    adress = models.CharField(max_length=200)
 
     # The date the post was created.
     date_posted = models.DateTimeField(default=timezone.now)
