@@ -35,9 +35,7 @@ else:
     create new entry in TagToPostTable 
 '''
 #holds the tag names, works with the TagToPostTable
-class Tag(models.Model):
-    post = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    
+class Tag(models.Model):   
     #TODO: frontend feature preventing entering more than 20 chars per tag.
     tag_name = models.CharField(max_length=20)
 
