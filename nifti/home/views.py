@@ -44,24 +44,16 @@ members = [
 
 # Create your views here.
 def home(request):
-  context = {
-    'title': 'Nifti',
-  }
-  return render(request, 'home/home.html', context)
+  return render(request, 'home/home.html')
 
 def about(request):
   context = {
-    'title': 'About',
     'members': members
   }
   return render(request, 'home/about.html', context)
 
 def login(request):
-  messages.success(request, f'Account created for Tommy.')
-  context = {
-    'title': 'Login',
-  }
-  return render(request, 'home/login.html', context)
+  return render(request, 'home/login.html')
 
 def register(request):
   if request.method == 'POST':
@@ -81,6 +73,6 @@ def register(request):
     form = UserRegistrationForm()
 
   context = {
-    'form':form
+    'form': form
   }
   return render(request, 'home/register.html', context)
