@@ -35,7 +35,6 @@ ALLOWED_HOSTS = ['*']
 # in the installed apps list.
 
 INSTALLED_APPS = [
-    'crispy_forms',
     'ckeditor',
     'user.apps.UserConfig',
     'search.apps.SearchConfig',
