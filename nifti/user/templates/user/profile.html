@@ -3,9 +3,14 @@
 <div class="content-section">
     <div class="media">
         <div class="media-body">
+            <!-- Show username. -->
             <h2 class="account-heading">{{user.username}}</h2>
-            <img class="rounded-circle account-img" src={{user.profile.profile_picture.url}}>
+            <!-- Show email. -->
             <p class="text-secondary">{{user.email}}</p>
+            <!-- Show profile picture. -->
+            <img class="rounded-circle account-img" src={{user.profile.profile_picture.url}}>
+            <!-- Show rich text. -->
+            <div style="text-align: left;">{{user.profile.body|safe}}</div>
         </div>
     </div>
 </div>
