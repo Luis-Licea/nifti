@@ -9,15 +9,21 @@
   <!-- Search form -->
   <div class="container-fluid">
 
-    <form class="" style="width: 100%; padding: 1.4em; padding-bottom: 0;">
+    <form 
+      class="" 
+      style="width: 100%; padding: 1.4em; padding-bottom: 0;"
+      action="" 
+      method="" 
+      value=""  
+      >
 
       <!-- Show registration, login, and search messages. -->
       {% include 'home/messages.html' %}
 
       <!-- Search bar. -->
       <div class="d-flex input-group">
-        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_bar" >
+        <button class="btn btn-outline-success" type="submit" value="Search" onclick="{{request.GET.username}}">Search</button>
       </div>
 
       <!-- Search bar options. -->
@@ -26,84 +32,93 @@
         {% with service='Service' task='Task' user='User' distance='Distance' %}
           <!-- Service switch. -->
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitch{{service}}">
+            <input class="form-check-input" type="checkbox" id="flexSwitch{{service}}" name="flexSwitch{{service}}">
             <label class="form-check-label" for="flexSwitch{{service}}">{{service}}</label>
           </div>
 
           <!-- Task switch. -->
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitch{{task}}" checked>
+            <input class="form-check-input" type="checkbox" id="flexSwitch{{task}}" name="flexSwitch{{task}}">
             <label class="form-check-label" for="flexSwitch{{task}}">{{task}}</label>
           </div>
 
           <!-- User switch. -->
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitc{{user}}" checked disabled>
+            <input class="form-check-input" type="checkbox" id="flexSwitch{{user}}"  name="flexSwitch{{user}}" >
             <label class="form-check-label" for="flexSwitch{{user}}">{{user}}</label>
           </div>
 
           <!-- Distance switch. -->
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitch{{distance}}" disabled>
+            <input class="form-check-input" type="checkbox" id="flexSwitch{{distance}}" name="flexSwitch{{distance}}">
             <label class="form-check-label" for="flexSwitch{{distance}}">{{distance}}
           </div>
         {% endwith %}
-
       </div>
-
     </form>
   </div>
 
   <!-- Search results. -->
   <section class="bg-transparent text-black p-4 d-flex justify-content-center w-100">
-    <div class="container">
+
+    <div class="container" id="search_results_user">
       <div class="row">
+        {% if search_type == 'user_search' %}
+          <!-- Iterate over every user in the results. -->
+          {% for user in users %}
+            <!-- Concatenate the first and last name to create the full_name. -->
+            {% with user.first_name|add:' '|add:user.last_name as full_name %}
+              <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
+                <div class="row g-0" style="margin-left: 0 !important;">
+                  <div class="col-md-4">
+                    <img
+                      src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                      alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                      class="img-fluid responsive"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ user.username }}</h5>
+                      <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
 
-        <!-- Iterate over every user in the results. -->
-        {% for user in users %}
-
-          <!-- Concatenate the first and last name to create the full_name. -->
-          {% with user.first|add:' '|add:user.last as full_name %}
-
-          <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
-            <div class="row g-0" style="margin-left: 0 !important;">
-              <div class="col-md-4">
-                <img
-                  src="{{ user.image_url }}"
-                  alt="{{ full_name }}"
-                  class="img-fluid responsive"
-                />
+                      <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
+                      <p class="card-text">
+                        <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                        {{ user.profile.title }}
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <!-- <h5 class="card-title">Card title</h5> -->
-                  <h5 class="card-title">{{ full_name }}</h5>
-                  <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
-
-                  <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
-                  <p class="card-text">
-                    <a href="{{ user.username }}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                      {{ user.description|truncatechars:120|default:"Hello, I am new member. Come check my profile!" }}
-
-                       <!-- {{ user.description|truncatechars_html:15|safe }} -->
-                    </a>
-                  </p>
-
-                  <!-- <p class="card-text">
-                    <small class="text-muted">Last updated 5 mins ago</small>
-                  </p> -->
-                  <!-- <a href="#" class="btn  mr-2"><i class="fas fa-link"></i> Visit Profile</a> -->
-                  <!-- <a href="#" class="btn"><i class="fab fa-github"></i> Contact</a> -->
+            {% endwith %}
+          {% endfor %}
+        {% elif search_type == 'service_or_task_search' %}
+          {% for post in posts %}
+            <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
+              <div class="row g-0" style="margin-left: 0 !important;">
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
+                    <p class="card-text">
+                      <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                      {{ post.title }}
+                      </a>
+                    </p>
+                    <p>{{ post.tag }} </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {% endwith %}
-        {% endfor %}
+          {% endfor %}
+        {% else %}
+            <p style="color:white;font-size:25px">No results</p>
+        {% endif %}
       </div>
     </div>
   </section>
 
-
 {% endblock content %}
+

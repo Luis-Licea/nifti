@@ -1,82 +1,56 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+from user.models import Profile
+from .models import Post, Tag, TagToPostTable
+from django.db.models import Q
 
-# Create your views her/e.
+
+# Create your views here.
 def search(request):
-  users = [
-    {
-      'username': 'Username1',
-      'first': 'First1',
-      'middle': 'Middle1',
-      'last': 'Last1',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
-    },
-    {
-      'username': 'Username2',
-      'first': 'First2',
-      'middle': 'Middle2',
-      'last': 'Last2',
-      'description': 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
-    },
-    {
-      'username': 'Username3',
-      'first': 'First3',
-      'middle': 'Middle3',
-      'last': 'Last3',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
-    },
-    {
-      'username': 'Username4',
-      'first': 'First4',
-      'middle': 'Middle4',
-      'last': 'Last4',
-      'description': '',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG',
-    },
-    {
-      'username': 'Username5',
-      'first': 'First4',
-      'middle': 'Middle4',
-      'last': 'Last4',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
-    },
-    {
-      'username': 'Username6',
-      'first': 'First4',
-      'middle': 'Middle4',
-      'last': 'Last4',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
-    },
-    {
-      'username': 'Username6',
-      'first': 'First4',
-      'middle': 'Middle4',
-      'last': 'Last4',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
-    },
-    {
-      'username': 'Username7',
-      'first': 'First4',
-      'middle': 'Middle4',
-      'last': 'Last4',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Red_Panda_%2824986761703%29.jpg/1280px-Red_Panda_%2824986761703%29.jpg',
-    },
-    {
-      'username': 'Username8',
-      'first': 'First4',
-      'middle': 'Middle4',
-      'last': 'Last4',
-      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'image_url': '',
-    },
-  ]
-  context = {
-    'users': users,
-  }
-  return render(request, 'search/search.html', context)
+  #handle which queries to make based on checkboxes
+  print('\n\n' + str(request.GET.get('flexSwitchUser')) + '\n\n')
+
+  if(request.GET and 
+    request.GET.get('search_bar') != "" and 
+    request.GET.get('search_bar') != None
+  ):
+    results = True
+    search_type = ''
+    users = ''
+    posts = ''
+    searched_for = ''
+
+    #User Search
+    if(request.GET.get('flexSwitchUser') == "on"):
+      users = User.objects.filter(Q(username__icontains=request.GET.get('search_bar')))
+      search_type = 'user_search' #service_or_task_search, distance_search
+      context = {
+        'search_type': search_type,
+        'users': users,
+      }
+      return render(request, 'search/search.html', context)
+
+    #Service/Task Search
+    elif(request.GET.get('flexSwitchService') == "on" or request.GET.get('flexSwitchTask') == "on"):
+      #service provider
+      if (request.GET.get('flexSwitchService') == "on"):
+        #Check matching tags, then check posts associated with said tags, then get those posts.
+        tags = Tag.objects.filter(Q(tag_name__icontains=request.GET.get('search_bar')))
+        posts = Post.objects.none()
+        for tag in tags:
+          tag_to_post_query_set = TagToPostTable.objects.filter(Q(tag_id=tag.id)) 
+          for tag_to_post in tag_to_post_query_set:
+            posts = posts | Post.objects.filter(Q(id=tag_to_post.post_id)) #adding to Post QuerySet
+
+        #TODO: now we want to pass into context a list of all tags associated with one post.
+        #potentially double-array or a dictionary
+
+      search_type = 'service_or_task_search'
+      context = {
+        'search_type': search_type,
+        'posts': posts,
+      }
+      return render(request, 'search/search.html', context)
+
+
+  return render(request, 'search/search.html')
