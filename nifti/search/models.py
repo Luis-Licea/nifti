@@ -17,7 +17,7 @@ class Post(models.Model):
     body = RichTextField(default='')
 
     #TODO: add feature in frontend preventing entering more than 100 chars
-    adress = models.CharField(max_length=200,default='')
+    address = models.CharField(max_length=200,default='')
 
     # The date the post was created.
     date_posted = models.DateTimeField(default=timezone.now)
