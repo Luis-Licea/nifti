@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.forms.fields import EmailField
 from django.forms.forms import Form
+from user.models import Profile
+from ckeditor.fields import RichTextField
 
 class UserRegistrationForm(UserCreationForm):
     """Create user registration form.
@@ -87,3 +89,69 @@ class UserRegistrationForm(UserCreationForm):
             self.cleaned_data['password1']
         )
         return user
+
+class UserUpdateForm(forms.ModelForm):
+    """Allow users to change their username and email. """
+
+    # This is an unstyled email component. Do not use it. It looks ugly.
+    # email = forms.EmailField()
+
+    # The form should contain an email field.
+    # The 'class' attribute uses Bootstrap to style the component.
+    email = forms.CharField(
+        label='Email',
+        max_length=100,
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Email',
+                'class': 'form-control',
+                }
+        )
+    )
+
+    # The form should contain an username field.
+    # The 'class' attribute uses Bootstrap to style the component.
+    username = forms.CharField(
+        label='Username',
+        min_length=4,
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Username',
+                'class': 'form-control',
+                }
+        )
+    )
+
+    class Meta:
+        # The form should only modify the User model.
+        model = User
+        # The form should only modify the following fields of the model.
+        fields = ['username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    """Allow users to change their profile title, body, and profile picture.
+    """
+
+    # The form should contain the title field.
+    # The 'class' attribute uses Bootstrap to style the component.
+    title = forms.CharField(
+        label='Title',
+        min_length=1,
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Title',
+                'class': 'form-control',
+                }
+        )
+    )
+
+    # The HTML field containing the website contents.
+    body = RichTextField()
+
+    class Meta:
+        # The form should only modify the Profile model.
+        model = Profile
+        # The form should only modify the following fields of the model.
+        fields = ['title', 'body', 'profile_picture']
