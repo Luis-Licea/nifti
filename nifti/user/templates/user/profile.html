@@ -1,17 +1,57 @@
 {% extends 'home/base.html' %}
+<!-- Load needed css files. -->
+{% load static %}
+<!-- Needed to auto-format forms using the |cripsy function. -->
+{% load crispy_forms_tags %}
+<!-- Custom CSS -->
+{% block style %}
+<!-- The profile.css file is needed to make the profile picture look circular. -->
+<link rel="stylesheet" href="{% static 'user/profile.css' %}">
+{% endblock style %}
+
 {% block content %}
 <div class="content-section">
     <div class="media">
         <div class="media-body">
+            <!-- Show profile picture. -->
+            <img class="rounded-circle account-img" style="margin-top: 3em" src={{user.profile.profile_picture.url}}>
+
             <!-- Show username. -->
-            <h2 class="account-heading">{{user.username}}</h2>
+            <h2 class="account-heading" style="margin-top: revert;">{{user.username}}</h2>
+
             <!-- Show email. -->
             <p class="text-secondary">{{user.email}}</p>
-            <!-- Show profile picture. -->
-            <img class="rounded-circle account-img" src={{user.profile.profile_picture.url}}>
+
             <!-- Show rich text. -->
             <div style="text-align: left;">{{user.profile.body|safe}}</div>
         </div>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="card text-black" style="margin-bottom: 1rem; max-width: fit-content;">
+
+                <!-- Show registration, login, update, and search messages. -->
+                {% include 'home/messages.html' %}
+
+                <h5 class="card-header">Profile Settings</h5>
+
+                <!-- Display as grid so button takes entire width. -->
+                <div class="card-body" style="text-align: left;">
+
+                    {% csrf_token %}
+                    <!-- User update form with username and email. -->
+                    {{ u_form | crispy }}
+                    <!-- Profile update form with title, body, and profile picture. -->
+                    {{ p_form | crispy }}
+                    <!-- This line is needed to display the rich text editor. -->
+                    {{ p_form.media }}
+
+                    <!-- Update button. -->
+                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: -moz-available;">Update</button>
+                </div>
+
+            </div>
+        </form>
+
     </div>
 </div>
 {% endblock content %}

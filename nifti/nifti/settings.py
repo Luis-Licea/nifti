@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # in the installed apps list.
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'ckeditor',
     'user.apps.UserConfig',
     'search.apps.SearchConfig',
@@ -170,7 +171,7 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
         # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
         # 'height': 291,
-        # 'width': '100%',
+        'width': '100%', # Make the rich text editor take all the available space.
         # 'filebrowserWindowHeight': 725,
         # 'filebrowserWindowWidth': 940,
         # 'toolbarCanCollapse': True,

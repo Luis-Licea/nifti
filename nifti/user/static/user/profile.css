@@ -1,0 +1,6 @@
+/* Make the profile picture look circular. */
+.account-img {
+    object-fit: cover;
+    width:400px;
+    height:400px;
+}

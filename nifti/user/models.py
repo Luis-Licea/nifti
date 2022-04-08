@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 # Install django-ckeditor first.
 from ckeditor.fields import RichTextField
+# Install Pillow first.
+from PIL import Image
 
 # Create your models here.
 class Profile(models.Model):
@@ -23,3 +25,28 @@ class Profile(models.Model):
 
     # The profile picture will be used on the profile and posts.
     profile_picture = models.ImageField(default="profile_pictures/default.jpg", upload_to="profile_pictures")
+
+    # Modifies the profile picture to lower its resolution. We want to keep
+    # profile pictures small in size.
+    def save(self):
+        # TODO: Delete the previous image that was uploaded before saving a new
+        # one.
+        super().save()
+
+        # Get the profile picture.
+        img = Image.open(self.profile_picture.path)
+
+        # The max height and width of the profile picture.
+        max_size = 400
+
+        # Check that the profile picture is not too large.
+        if img.height > max_size or img.width > max_size:
+            # Specify the desired width and height.
+            output_size = (max_size, max_size)
+            # Resize the picture.
+            img.thumbnail(output_size)
+            # Save the resized picture.
+            img.save(self.profile_picture.path)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
