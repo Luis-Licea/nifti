@@ -14,7 +14,7 @@
     <div class="media">
         <div class="media-body">
             <!-- Show profile picture. -->
-            <img class="rounded-circle account-img" style="margin-top: 3em" src={{user.profile.profile_picture.url}}>
+            <img class="rounded-circle account-img" style="margin-top: 3em; border: 10px solid #ced4da;" src={{user.profile.profile_picture.url}}>
 
             <!-- Show username. -->
             <h2 class="account-heading" style="margin-top: revert;">{{user.username}}</h2>
@@ -27,11 +27,11 @@
         </div>
 
         <form method="post" enctype="multipart/form-data">
+
+            <!-- Show registration, login, update, and search messages. -->
+            {% include 'home/messages.html' %}
+
             <div class="card text-black" style="margin-bottom: 1rem; max-width: fit-content;">
-
-                <!-- Show registration, login, update, and search messages. -->
-                {% include 'home/messages.html' %}
-
                 <h5 class="card-header">Profile Settings</h5>
 
                 <!-- Display as grid so button takes entire width. -->
@@ -45,8 +45,19 @@
                     <!-- This line is needed to display the rich text editor. -->
                     {{ p_form.media }}
 
+                    <style>
+                        /* Make the rich text editor's borders round. */
+                        .cke_chrome {
+                            border-radius: 0.25rem;
+                        }
+                        /* Add space between username, email, body, etc, fields. */
+                        .control-group {
+                            margin-bottom: 1rem;
+                        }
+                    </style>
+
                     <!-- Update button. -->
-                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: -moz-available;">Update</button>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: -moz-available; width: -webkit-fill-available;">Update</button>
                 </div>
 
             </div>
