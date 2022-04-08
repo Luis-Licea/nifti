@@ -51,7 +51,7 @@ def deleteuser(request):
         user = request.user
         user.delete()
         messages.info(request, 'Your account has been deleted.')
-        return redirect('blog-home')
+        return redirect('home-home')
     else:
         delete_form = UserDeleteForm(instance=request.user)
 
@@ -59,4 +59,4 @@ def deleteuser(request):
         'delete_form': delete_form
     }
 
-    return render(request, 'users/delete_account.html', context)
+    return render(request, 'user/delete_account.html', context)
