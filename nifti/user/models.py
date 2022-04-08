@@ -28,7 +28,7 @@ class Profile(models.Model):
 
     # Modifies the profile picture to lower its resolution. We want to keep
     # profile pictures small in size.
-    def save(self):
+    def save(self, *args, **kwargs):
         # TODO: Delete the previous image that was uploaded before saving a new
         # one.
         super().save()

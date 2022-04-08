@@ -40,6 +40,7 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('profile', user_views.profile, name='user-profile'),
     path('register', home_views.register, name='home-register'),
+    path('unregister', user_views.deleteuser, name='home-unregister'),
     path('about', home_views.about, name='home-about'),
     path('search/', include('search.urls')),
     path('admin/', admin.site.urls),

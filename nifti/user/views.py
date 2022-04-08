@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # Import the forms needed to update the user information and profile settings.
 from home.forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserDeleteForm
 
 # Create your views here.
 
@@ -42,3 +43,20 @@ def profile(request):
     'p_form': p_form,
   }
   return render(request, 'user/profile.html', context)
+
+@login_required
+def deleteuser(request):
+    if request.method == 'POST':
+        delete_form = UserDeleteForm(request.POST, instance=request.user)
+        user = request.user
+        user.delete()
+        messages.info(request, 'Your account has been deleted.')
+        return redirect('home-home')
+    else:
+        delete_form = UserDeleteForm(instance=request.user)
+
+    context = {
+        'delete_form': delete_form
+    }
+
+    return render(request, 'user/delete_account.html', context)
