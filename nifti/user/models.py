@@ -18,7 +18,7 @@ class Profile(models.Model):
     title = models.CharField(max_length=100, default="User Profile")
 
     # The HTML field containing the website contents.
-    body = RichTextField(default='')
+    body = RichTextField(default='', blank=True)
 
     # The date the profile was created.
     date_created = models.DateTimeField(default=timezone.now)
