@@ -180,6 +180,15 @@ CKEDITOR_CONFIGS = {
 }
 
 # Allows users to sign in to their gmail through Django
+# Add the following lines at the end of the file <project>/env/bin/activate
+# export EMAIL_USER="<your email>@gmail.com"
+# export EMAIL_PASS="<your App Password>"
+# In order to obtain an <App Password>, go to https://myaccount.google.com/ to
+# enable "2-Step Verification" on your Google account. After that, go to "App
+# Passwords" and then choose Select App -> Other (custom name) and choose any
+# name. This will produce an <App Password> that you can use.
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
