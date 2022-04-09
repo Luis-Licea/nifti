@@ -13,39 +13,43 @@ def search(request):
   print(f'\n{request.GET}\n')
 
   # Get either Service, Task, or User
-  search_type: str = request.GET.get('search_type')
+  search_option: str = request.GET.get('search_option')
 
-  # Get search string from search bar.
-  search_str: str = request.GET.get('search_bar')
+  # Get search string from search bar if it exists, else get an empty string.
+  search_string: str = request.GET.get('search_string') if request.GET.get('search_string') else "";
 
   # Get result ordering.
-  search_ord: str = request.GET.get('ordering')
+  search_order: str = request.GET.get('search_order')
 
 
   # Verify that the query is not empty.
-  if(request.GET and search_str):
+  if(request.GET and search_string):
     results = True
+    search_type = ''
     users = ''
     posts = ''
     searched_for = ''
 
     #User Search
-    if(search_type == "User"):
-      users = User.objects.filter(Q(username__icontains=search_str))
+    if(search_option == "user"):
+      users = User.objects.filter(Q(username__icontains=search_string))
       # service_or_task_search, distance_search
       search_type = 'user_search'
       context = {
+          'search_option': search_option,
+          'search_order': search_order,
+          'search_string': search_string,
           'search_type': search_type,
           'users': users,
       }
       return render(request, 'search/search.html', context)
 
     #Service/Task Search
-    elif(search_type == "Service" or search_type == "Task"):
+    elif(search_option == "service" or search_option == "task"):
       #service provider
-      if (search_type == "Service"):
+      if (search_option == "service"):
         #Check matching tags, then check posts associated with said tags, then get those posts.
-        tags = Tag.objects.filter(Q(tag_name__icontains=search_str))
+        tags = Tag.objects.filter(Q(tag_name__icontains=search_string))
         posts = Post.objects.none()
         for tag in tags:
           tag_to_post_query_set = TagToPostTable.objects.filter(
@@ -60,9 +64,17 @@ def search(request):
 
       search_type = 'service_or_task_search'
       context = {
+          'search_option': search_option,
+          'search_order': search_order,
+          'search_string': search_string,
           'search_type': search_type,
           'posts': posts,
       }
       return render(request, 'search/search.html', context)
 
-  return render(request, 'search/search.html')
+  context = {
+      'search_option': search_option,
+      'search_order': search_order,
+      'search_string': search_string,
+  }
+  return render(request, 'search/search.html', context)

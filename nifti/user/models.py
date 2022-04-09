@@ -31,7 +31,7 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         # TODO: Delete the previous image that was uploaded before saving a new
         # one.
-        super().save()
+        super().save(*args, **kwargs)
 
         # Get the profile picture.
         img = Image.open(self.profile_picture.path)

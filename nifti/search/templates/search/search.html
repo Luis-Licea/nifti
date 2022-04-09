@@ -24,41 +24,51 @@
       <div class="d-flex input-group">
 
         <!-- Search bar. -->
-        <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_bar" >
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_string" value="{{search_string}}">
 
         <!-- Search button. -->
         <button class="btn btn-outline-success" type="submit" value="Search" onclick="{{request.GET.username}}">Search</button>
       </div>
 
       <!-- Search bar options. -->
-      {% with service='Service' task='Task' user='User' distance='Distance' %}
 
       <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="width: inherit; margin-top: 0.5rem;">
 
+      {% with service='service' task='task' user='user' distance='distance' %}
         <!-- Service switch. -->
-        <input type="radio" class="btn-check" name="search_type" id="btnradio1" autocomplete="off" value="{{service}}" checked>
-        <label class="btn btn-outline-primary" for="btnradio1">{{service}}</label>
+        <input type="radio" class="btn-check" name="search_option" id="btnradio1" autocomplete="off" value="{{service}}"
+          {% if not search_option %}
+            {% comment %} Select service if no other option is selected. {% endcomment %}
+            checked
+          {% elif search_option == service %}
+            {% comment %} Select service if search option is service. {% endcomment %}
+            checked
+          {% endif %}>
+        <label class="btn btn-outline-primary" for="btnradio1">{{service.capitalize}}</label>
 
         <!-- Task switch. -->
-        <input type="radio" class="btn-check" name="search_type" id="btnradio2" autocomplete="off" value="{{task}}">
-        <label class="btn btn-outline-primary" for="btnradio2">{{task}}</label>
+        <input type="radio" class="btn-check" name="search_option" id="btnradio2" autocomplete="off" value="{{task}}" {% if search_option == task %}checked{% endif %}>
+        <label class="btn btn-outline-primary" for="btnradio2">{{task.capitalize}}</label>
 
         <!-- User switch. -->
-        <input type="radio" class="btn-check" name="search_type" id="btnradio3" autocomplete="off" value="{{user}}">
-        <label class="btn btn-outline-primary" for="btnradio3">{{user}}</label>
+        <input type="radio" class="btn-check" name="search_option" id="btnradio3" autocomplete="off" value="{{user}}" {% if search_option == user %}checked{% endif %}>
+        <label class="btn btn-outline-primary" for="btnradio3">{{user.capitalize}}</label>
+      {% endwith %}
 
-        <select name="ordering" id="select" class="form-select bg-dark" aria-label="Ordering selection" style="width: auto;">
-        <!-- -- <option selected>Ordering</option> --> -->
+        <!-- Search result order. -->
+        <select name="search_order" id="select" class="form-select bg-dark" aria-label="Ordering selection" style="width: auto;">
 
+          {% with closest='closest' furthest='furthest' alphabetical='alphabetical' reversed='reversed' %}
           <optgroup label="Distance">
-            <option value="Closest">Closest</option>
-            <option value="Furthest">Furthest</option>
+            <option value="{{closest}}" {% if search_order == closest %}selected{% endif %}>{{closest.capitalize}}</option>
+            <option value="{{furthest}}" {% if search_order == furthest %}selected{% endif %}>{{furthest.capitalize}}</option>
           </optgroup>
 
           <optgroup label="Title Name">
-            <option value="Alphabetical">Alphabetical</option>
-            <option value="Reversed">Reversed</option>
+            <option value="{{alphabetical}}" {% if search_order == alphabetical %}selected{% endif %}>{{alphabetical.capitalize}}</option>
+            <option value="{{reversed}}" {% if search_order == reversed %}selected{% endif %}>{{reversed.capitalize}}</option>
           </optgroup>
+          {% endwith %}
 
         </select>
 
