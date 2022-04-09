@@ -14,10 +14,28 @@ body {
   margin-bottom: 2rem;
 }
 
-.btn {
+.btn, #select {
   -webkit-text-fill-color: white !important;
   border: 1px solid #fff !important;
   box-shadow: #222 1px 0 10px;
+}
+
+#select {
+  background: transparent;
+
+  /* Only the right side needs to be rounded. */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+  /* These three attributes are needed to show the dropdown arrow. */
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+  appearance: auto !important;
+}
+
+.form-select {
+  /* This is needed in chrome to show the white dropdown arrow. */
+  color: white;
 }
 
 .btn:hover, .btn:focus {
@@ -35,6 +53,7 @@ body {
   margin-right: 2em;
 }
 
+/* Change card size depending on image size. */
 .responsive {
   width: 100%;
   /* height: 100%; */
