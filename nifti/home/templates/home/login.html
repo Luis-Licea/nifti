@@ -1,8 +1,8 @@
 {% extends 'home/base.html' %}
 {% block content %}
 
-  <!-- Raise the login form so it is not exactly in the center of the page. -->
-  <div style="margin-bottom: 50%; margin-top: 3em;">
+  <!-- Leave blank space at the top and bottom of the page. -->
+  <div style="margin: 3em 0;">
 
     <div class="card text-black" style="width: 25rem; margin: auto; max-width: fit-content;">
 
@@ -30,7 +30,7 @@
           <div class="mb-3">
             <label for="id_username" class="form-label visually-hidden">Username</label>
             {{ field }}
-            <input type="text" name="username" value="asdf" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username" class="form-control" placeholder="Username">
+            <input type="text" name="username" value="" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username" class="form-control" placeholder="Username">
           </div>
 
           <!-- Password field. -->
@@ -48,10 +48,11 @@
 
     </div>
 
-      <div id="registrationHelp" class="form-text">
-        Not registered?
-        <a href="{% url 'home-register' %}">Register</a>
-      </div>
+    <!-- Link to password reset page. -->
+    <div id="passwordHelp" class="form-text">
+      Forgot password?
+      <a href="{% url 'password_reset' %}">Reset</a>
+    </div>
 
   </div>
 

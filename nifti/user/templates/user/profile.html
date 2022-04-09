@@ -34,7 +34,6 @@
             <div class="card text-black" style="margin-bottom: 1rem; max-width: fit-content;">
                 <h5 class="card-header">Profile Settings</h5>
 
-                <!-- Display as grid so button takes entire width. -->
                 <div class="card-body" style="text-align: left;">
 
                     {% csrf_token %}
@@ -54,14 +53,30 @@
                         .control-group {
                             margin-bottom: 1rem;
                         }
+
                     </style>
 
-                    <!-- Update button. -->
-                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: -moz-available; width: -webkit-fill-available;">Update</button>
+                    <!-- Update Profile button. -->
+                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; margin-bottom: 0.5rem; width: -moz-available; width: -webkit-fill-available;">Update</button>
+
                 </div>
 
             </div>
         </form>
+
+        <!-- Account Settings. -->
+        <div class="card text-black my-3">
+            <h5 class="card-header">Account Settings</h5>
+            <div class="card-body">
+
+                <!-- Reset Password Button. -->
+                <a href="{% url 'password_reset' %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Reset Password</a>
+
+                <!-- Delete Account Button. -->
+                <a href="{% url 'home-unregister' %}" class="btn btn-outline-danger" style="display: block; " role="button">Delete Account</a>
+
+            </div>
+        </div>
 
     </div>
 </div>
