@@ -112,8 +112,9 @@
               </div>
             {% endwith %}
           {% endfor %}
-        {% elif search_type == 'service_or_task_search' %}
-          {% for post in posts %}
+        <!-- Service/Task based Search -->
+        {% elif search_type == 'service' or search_type == 'task' %}
+          {% for post, tags in posts_and_their_tags %}
             <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
               <div class="row g-0" style="margin-left: 0 !important;">
                 <div class="col-md-8">
@@ -122,10 +123,15 @@
                     <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
                     <p class="card-text">
                       <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                      {{ post.title }}
+                        {{ post.title }}
                       </a>
                     </p>
-                    <p>{{ post.tag }} </p>
+                    <!-- Multiple tags per each post -->
+                    {% for tag in tags %}
+                      <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
+                        <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
+                      </a>
+                    {% endfor %}
                   </div>
                 </div>
               </div>

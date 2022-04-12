@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from user.models import Profile
 from .models import Post, Tag, TagToPostTable
 from django.db.models import Q
-
+from .distance_calculation import get_distance_between_coords
 
 # Create your views here.
 def search(request):
@@ -46,29 +46,43 @@ def search(request):
 
     #Service/Task Search
     elif(search_option == "service" or search_option == "task"):
-      #service provider
-      if (search_option == "service"):
-        #Check matching tags, then check posts associated with said tags, then get those posts.
-        tags = Tag.objects.filter(Q(tag_name__icontains=search_string))
-        posts = Post.objects.none()
-        for tag in tags:
-          tag_to_post_query_set = TagToPostTable.objects.filter(
-              Q(tag_id=tag.id))
-          for tag_to_post in tag_to_post_query_set:
-            # adding to Post QuerySet
-            posts = posts | Post.objects.filter(
-                Q(id=tag_to_post.post_id))
+      #Query tag table for tags, then check posts associated with said tags, then get those posts.
+      tags = Tag.objects.filter(Q(tag_name__icontains=search_string))
+      posts = Post.objects.none()
+      for tag in tags:
+        tag_to_post_query_set = TagToPostTable.objects.filter(
+          Q(tag_id=tag.id)
+        )
+        for tag_to_post in tag_to_post_query_set:
+          serv_prov_bool = 1 if search_option == "service" else 0
+          # adding to Post QuerySet
+          posts = posts | Post.objects.filter(
+            Q(id=tag_to_post.post_id) & 
+            Q(service_provider=serv_prov_bool)
+          )
+      #Now we pass into context a list of all tags associated with one post.
+      posts_and_their_tags = [] #list of [post_id, (list of tags)]
+      temp_tags_from_post = [] #list of tags associated with one post
+      for post in posts:
+        post_to_tag_query_set = TagToPostTable.objects.filter(
+          Q(post_id=post.id)
+        )
+        temp_tags_from_post = []
+        for post_to_tag in post_to_tag_query_set:
+          temp_tags_from_post.append(Tag.objects.get(
+            Q(id=post_to_tag.tag_id)
+          ))
+        temp_post_and_tags_tuple = (post, temp_tags_from_post)
+        posts_and_their_tags.append(temp_post_and_tags_tuple)
 
-        #TODO: now we want to pass into context a list of all tags associated with one post.
-        #potentially double-array or a dictionary
-
-      search_type = 'service_or_task_search'
+      search_type = "service" if search_option == "service" else "task"
       context = {
           'search_option': search_option,
           'search_order': search_order,
           'search_string': search_string,
           'search_type': search_type,
           'posts': posts,
+          'posts_and_their_tags': posts_and_their_tags,
       }
       return render(request, 'search/search.html', context)
 
