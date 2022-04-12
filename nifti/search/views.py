@@ -81,7 +81,6 @@ def search(request):
           'search_order': search_order,
           'search_string': search_string,
           'search_type': search_type,
-          'posts': posts,
           'posts_and_their_tags': posts_and_their_tags,
       }
       return render(request, 'search/search.html', context)
