@@ -33,7 +33,7 @@ def search(request):
     #User Search
     if(search_option == "user"):
       users = User.objects.filter(Q(username__icontains=search_string))
-      # service_or_task_search, distance_search
+
       search_type = 'user_search'
       context = {
           'search_option': search_option,

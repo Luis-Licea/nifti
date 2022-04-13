@@ -81,64 +81,70 @@
 
     <div class="container" id="search_results_user">
       <div class="row">
+        <!-- User based Search -->
         {% if search_type == 'user_search' %}
-          <!-- Iterate over every user in the results. -->
-          {% for user in users %}
-            <!-- Concatenate the first and last name to create the full_name. -->
-            {% with user.first_name|add:' '|add:user.last_name as full_name %}
+          {% if not users %}
+            <p style="color:white;font-size:25px">No users found.</p>
+          {% else %}
+            {% for user in users %}
+              <!-- Concatenate the first and last name to create the full_name. -->
+              {% with user.first_name|add:' '|add:user.last_name as full_name %}
+                <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
+                  <div class="row g-0" style="margin-left: 0 !important;">
+                    <div class="col-md-4">
+                      <img
+                        src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                        alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                        class="img-fluid responsive"
+                      />
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ user.username }}</h5>
+                        <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
+                        <p class="card-text">
+                          <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                          {{ user.profile.title }}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endwith %}
+            {% endfor %}
+          {% endif %}
+        <!-- Service/Task based Search -->
+        {% elif search_type == 'service' or search_type == 'task' %}
+          {% if not posts_and_their_tags %}
+            <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
+          {% else %}
+            {% for post, tags in posts_and_their_tags %}
               <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
                 <div class="row g-0" style="margin-left: 0 !important;">
-                  <div class="col-md-4">
-                    <img
-                      src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
-                      alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
-                      class="img-fluid responsive"
-                    />
-                  </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title">{{ user.username }}</h5>
-                      <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
-
+                      <h5 class="card-title">{{ post.title }}</h5>
                       <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
                       <p class="card-text">
                         <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                        {{ user.profile.title }}
+                          {{ post.title }}
                         </a>
                       </p>
+                      <!-- Multiple tags per each post -->
+                      {% for tag in tags %}
+                        <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
+                          <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
+                        </a>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
               </div>
-            {% endwith %}
-          {% endfor %}
-        <!-- Service/Task based Search -->
-        {% elif search_type == 'service' or search_type == 'task' %}
-          {% for post, tags in posts_and_their_tags %}
-            <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
-              <div class="row g-0" style="margin-left: 0 !important;">
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
-                    <p class="card-text">
-                      <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                        {{ post.title }}
-                      </a>
-                    </p>
-                    <!-- Multiple tags per each post -->
-                    {% for tag in tags %}
-                      <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
-                        <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
-                      </a>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          {% endif %}
         {% else %}
-            <p style="color:white;font-size:25px">No results</p>
+          <p style="color:white;font-size:25px">Start your Nifti Search!</p>
         {% endif %}
       </div>
     </div>

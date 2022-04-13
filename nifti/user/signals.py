@@ -4,11 +4,13 @@ from django.dispatch import receiver
 from .models import Profile
 
 #when a user receives the post_save signal, do this function
+#create a profile every time a new User is created
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
+#update and save the profile's data everytime the user is saved
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     instance.profile.save()
