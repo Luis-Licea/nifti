@@ -54,6 +54,7 @@ urlpatterns = [
         name='password_reset_complete'
     ),
     path('profile', user_views.profile, name='user-profile'),
+    path('user/', include('user.urls')),
     path('register', home_views.register, name='home-register'),
     path('unregister', user_views.deleteuser, name='home-unregister'),
     path('about', home_views.about, name='home-about'),

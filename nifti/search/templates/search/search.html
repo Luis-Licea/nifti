@@ -100,12 +100,18 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title">{{ user.username }}</h5>
-                      <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+                      <!-- Link to user profile. -->
+                      <h5 class="card-title">
+                        <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' user %}">{{ user }}</a>
+                      </h5>
+                      <!-- Profile creation date. -->
+                      <h6 class="card-subtitle mb-2 text-muted">
+                        {{ user.profile.date_created|date:"F d, Y" }}
+                      </h6>
 
                       <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
                       <p class="card-text">
-                        <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                        <a href="{% url 'user-static-profile' user %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
                         {{ user.profile.title }}
                         </a>
                       </p>
@@ -121,13 +127,31 @@
               <div class="row g-0" style="margin-left: 0 !important;">
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
+
+                    <!-- Post title. -->
+                    <h5 class="card-title">
+                      <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: whitesmoke;">
+                      {{ post.title }}
+                      </a>
+                    </h5>
+
+                    <h6 class="card-subtitle mb-2 text-muted">
+
+                      <!-- Post author. -->
+                      <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
+
+                      <!-- Profile creation date. -->
+                      {{ user.profile.date_created|date:"F d, Y" }}
+
+                    </h6>
+
                     <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
                     <p class="card-text">
-                      <a href="#put_url_to_user_profile_here_somehow" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                      <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
                       {{ post.title }}
                       </a>
                     </p>
+
                     <p>{{ post.tag }} </p>
                   </div>
                 </div>

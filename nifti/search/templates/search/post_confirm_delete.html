@@ -1,0 +1,23 @@
+{% extends 'home/base.html' %}
+{% block content %}
+
+<div class="card text-black">
+    <h5 class="card-header">Delete Advertisement</h5>
+    <div class="card-body">
+        <p class="card-text">
+            Are you sure you want to delete the advertisement "{{ object.title }}"? The post will be deleted permanently.
+        </p>
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Cancel button returns user to post. -->
+            <a href="{% url 'post-detail' object.id %}" class="btn btn-secondary" style="color: white;">Cancel</a>
+
+            <!-- The ad will be submitted when the submit button is pressed. -->
+            <button type="submit" class="btn btn-danger">Delete</button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

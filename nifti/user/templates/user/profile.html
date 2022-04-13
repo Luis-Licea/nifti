@@ -10,8 +10,13 @@
 {% endblock style %}
 
 {% block content %}
-<div class="content-section">
+<div class="content-section" style="margin-top: 3em;">
+
+    <!-- Show registration, login, update, and search messages. -->
+    {% include 'home/messages.html' %}
+
     <div class="media">
+        {% if static_view %}
         <div class="media-body">
             <!-- Show profile picture. -->
             <img class="rounded-circle account-img" style="margin-top: 3em; border: 10px solid #ced4da;" src={{user.profile.profile_picture.url}}>
@@ -25,7 +30,9 @@
             <!-- Show rich text. -->
             <div style="text-align: left;">{{user.profile.body|safe}}</div>
         </div>
+        {% endif %}
 
+        {% if not static_view %}
         <form method="post" enctype="multipart/form-data">
 
             <!-- Show registration, login, update, and search messages. -->
@@ -57,27 +64,26 @@
                     </style>
 
                     <!-- Update Profile button. -->
-                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; margin-bottom: 0.5rem; width: -moz-available; width: -webkit-fill-available;">Update</button>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; display: block; margin: 0.5rem 0;">Update</button>
 
                 </div>
 
             </div>
         </form>
 
-        <!-- Account Settings. -->
-        <div class="card text-black my-3">
-            <h5 class="card-header">Account Settings</h5>
+        {% endif %}
+
+        {% if static_view %}
             <div class="card-body">
 
                 <!-- Reset Password Button. -->
                 <a href="{% url 'password_reset' %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Reset Password</a>
 
                 <!-- Delete Account Button. -->
-                <a href="{% url 'home-unregister' %}" class="btn btn-outline-danger" style="display: block; " role="button">Delete Account</a>
+                <a href="{% url 'home-unregister' %}" class="btn btn-outline-danger" style="display: block; margin-bottom: 0.5rem;" role="button">Delete Account</a>
 
             </div>
-        </div>
-
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

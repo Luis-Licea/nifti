@@ -8,6 +8,7 @@
         {% url 'home-home' as home %}
         {% url 'home-about' as about %}
         {% url 'user-profile' as profile %}
+        {% url 'post-create' as create_post %}
         {% url 'home-logout' as logout %}
         {% url 'home-login' as login %}
         {% url 'home-register' as register %}
@@ -18,6 +19,7 @@
         <a class="nav-link{% if request.path == search %} active" aria-current="page" {% else %}"{% endif %} href="{{ search }}">Search</a>
         {% if user.is_authenticated %}
           <a class="nav-link{% if request.path == profile %} active" aria-current="page" {% else %}"{% endif %} href="{{ profile }}">Profile</a>
+          <a class="nav-link{% if request.path == create_post %} active" aria-current="page" {% else %}"{% endif %} href="{{ create_post }}">Post Ad</a>
           <a class="nav-link{% if request.path == logout %} active" aria-current="page" {% else %}"{% endif %} href="{{ logout }}">Logout</a>
         {% else %}
           <a class="nav-link{% if request.path == login %} active" aria-current="page" {% else %}"{% endif %} href="{{ login }}">Login</a>

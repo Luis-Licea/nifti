@@ -1,0 +1,32 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+  <!-- Leave blank space at the top and bottom of the page. -->
+  <div style="margin: 3em 0;" >
+
+    <form method="post">
+      <div class="card text-black" style="margin: auto; max-width: fit-content;">
+
+        <h5 class="card-header">Post Advertisement</h5>
+
+        <!-- Display as grid so button takes entire width. -->
+        <div class="card-body d-grid" style="text-align: left">
+
+          {% csrf_token %}
+          <!-- Display form. -->
+          {{ form | crispy }}
+          <!-- Invoke rich text editor. -->
+          {{ form.media }}
+
+          <button type="submit" class="btn btn-primary">Post</button>
+
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+
+
+{% endblock content %}

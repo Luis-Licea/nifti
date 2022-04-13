@@ -4,7 +4,7 @@ from django.contrib import messages
 # Import the forms needed to update the user information and profile settings.
 from home.forms import UserUpdateForm, ProfileUpdateForm
 from .forms import UserDeleteForm
-
+from django.contrib.auth.models import User
 # Create your views here.
 
 @login_required
@@ -30,8 +30,8 @@ def profile(request):
 
       # Show a success message after saving the forms.
       messages.success(request, f'Your profile has been updated!')
-      # Redirect user to the profile settings page because we do anything else.
-      return redirect('user-profile')
+      # Redirect user to the profile page after saving the changes.
+      return redirect('user-static-profile', request.user )
 
   else:
     # Create empty forms.
@@ -60,3 +60,16 @@ def deleteuser(request):
     }
 
     return render(request, 'user/delete_account.html', context)
+
+def profile_detail(request, username):
+    """Display user profile when clicked. All contents are static and cannot be
+    modified.
+    """
+
+    # Get the user whose username matches the url parameter.
+    user = User.objects.get(username=username)
+    context = {
+      'user': user,
+      'static_view': True,
+    }
+    return render(request, 'user/profile.html', context)

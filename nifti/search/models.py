@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # Install django-ckeditor first.
 from ckeditor.fields import RichTextField
 from user.models import Profile
+from django.urls import reverse
 
 # Create your models here.
 class Post(models.Model):
@@ -25,6 +26,10 @@ class Post(models.Model):
     #default setting is Service Consumer
     service_provider = models.BooleanField(default=False)
 
+    # Derive the post url from the key number.
+    def get_absolute_url(self):
+        # Return the full URL path to a post.
+        return reverse('post-detail', kwargs={'pk': self.pk})
 
 #TODO: make a function add_tags() whenever a user submits/creates a post
 '''

@@ -1,0 +1,53 @@
+{% extends 'home/base.html' %}
+<!-- Load needed css files. -->
+{% load static %}
+<!-- Needed to auto-format forms using the |cripsy function. -->
+{% load crispy_forms_tags %}
+<!-- Custom CSS -->
+{% block style %}
+<!-- The profile.css file is needed to make the profile picture look circular. -->
+<link rel="stylesheet" href="{% static 'user/profile.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <!-- Show profile picture. -->
+            <img class="rounded-circle account-img" style="margin-top: 3em; border: 10px solid #ced4da;" src={{object.author.profile.profile_picture.url}}>
+
+            <h2 class="account-heading" style="margin-top: revert;">{{post.title}}</h2>
+
+            <div class="article-metadata mb-3">
+                <!-- Link to author. -->
+                <a class="mr-2" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
+                <!-- Post date. -->
+                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+
+            <!-- Show rich text. -->
+            <div style="text-align: left;">{{post.body|safe}}</div>
+
+        </div>
+
+        {% if object.author == user %}
+        <!-- Account Settings. -->
+        <!-- <div class="card my-3 bg-transparent"> -->
+            <!-- <h5 class="card-header">Post Settings</h5> -->
+            <!-- <div class="card-body"> -->
+
+                <!-- Edit Post Button. -->
+                <a href="{% url 'post-update' object.id %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Edit Post</a>
+
+                <!-- Delete Post Button. -->
+                <a href="{% url 'post-delete' object.id %}" class="btn btn-outline-danger" style="display: block; " role="button">Delete Post</a>
+
+            <!-- </div> -->
+        <!-- </div> -->
+        {% endif %}
+
+    </div>
+</div>
+
+
+{% endblock content %}
