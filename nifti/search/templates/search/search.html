@@ -82,9 +82,9 @@
     <div class="container" id="search_results_user">
       <div class="row">
         <!-- User based Search -->
-        {% if search_type == 'user_search' %}
+        {% if search_type == 'user' %}
           {% if not users %}
-            <p style="color:white;font-size:25px">No users found.</p>
+            <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
           {% else %}
             {% for user in users %}
               <!-- Concatenate the first and last name to create the full_name. -->
