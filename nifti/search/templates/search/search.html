@@ -81,44 +81,99 @@
 
     <div class="container" id="search_results_user">
       <div class="row">
-        {% if search_type == 'user_search' %}
-          <!-- Iterate over every user in the results. -->
-          {% for user in users %}
-            <!-- Concatenate the first and last name to create the full_name. -->
-            {% with user.first_name|add:' '|add:user.last_name as full_name %}
+        <!-- User based Search -->
+        {% if search_type == 'user' %}
+          {% if not users %}
+            <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
+          {% else %}
+            {% for user in users %}
+              <!-- Concatenate the first and last name to create the full_name. -->
+              {% with user.first_name|add:' '|add:user.last_name as full_name %}
+                <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
+                  <div class="row g-0" style="margin-left: 0 !important;">
+                    <div class="col-md-4">
+
+                      <!-- User profile picture. -->
+                      <img
+                        src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                        alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                        class="img-fluid responsive"
+                      />
+
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+
+                        <!-- User profile link. -->
+                        <h5 class="card-title">
+                          <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' user %}">{{ user }}</a>
+                        </h5>
+
+                        <!-- User profile creation date. -->
+                        <h6 class="card-subtitle mb-2 text-muted">
+                          {{ user.profile.date_created|date:"F d, Y" }}
+                        </h6>
+
+                        <!-- User profile title hyperlink. -->
+                        <p class="card-text">
+                          <a href="{% url 'user-static-profile' user %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                          {{ user.profile.title }}
+                          </a>
+                        </p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endwith %}
+            {% endfor %}
+          {% endif %}
+        <!-- Service/Task based Search -->
+        {% elif search_type == 'service' or search_type == 'task' %}
+          {% if not posts_and_their_tags %}
+            <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
+          {% else %}
+            {% for post, tags in posts_and_their_tags %}
               <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
                 <div class="row g-0" style="margin-left: 0 !important;">
-                  <div class="col-md-4">
-                    <img
-                      src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
-                      alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
-                      class="img-fluid responsive"
-                    />
-                  </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <!-- Link to user profile. -->
+
+                      <!-- User profile link. -->
                       <h5 class="card-title">
-                        <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' user %}">{{ user }}</a>
+                        <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
                       </h5>
-                      <!-- Profile creation date. -->
+
+                      <!-- User profile creation date. -->
                       <h6 class="card-subtitle mb-2 text-muted">
-                        {{ user.profile.date_created|date:"F d, Y" }}
+                        {{ post.author.profile.date_created|date:"F d, Y" }}
                       </h6>
 
-                      <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
+                      <!-- Post title hyperlink. -->
                       <p class="card-text">
-                        <a href="{% url 'user-static-profile' user %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                        {{ user.profile.title }}
+                        <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                          {{ post.title }}
                         </a>
                       </p>
+
+                      <!-- Multiple tags per each post -->
+                      {% for tag in tags %}
+                        <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
+                          <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
+                        </a>
+                      {% endfor %}
+
                     </div>
                   </div>
                 </div>
               </div>
-            {% endwith %}
-          {% endfor %}
+            {% endfor %}
+          {% endif %}
         <!-- Service/Task based Search -->
+
+
+        <!-- NOTE: Delete everything in comment? -->
+        {% comment %}
         {% elif search_type == 'service' or search_type == 'task' %}
           {% for post, tags in posts_and_their_tags %}
             <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
@@ -165,7 +220,10 @@
             </div>
           {% endfor %}
         {% else %}
-            <p style="color:white;font-size:25px">No results</p>
+          <p style="color:white;font-size:25px">Start your Nifti Search!</p>
+        {% endcomment %}
+
+
         {% endif %}
       </div>
     </div>

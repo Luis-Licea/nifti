@@ -1,6 +1,7 @@
 #for distance calculation
 import haversine as hs
 from haversine import Unit
+from geopy.geocoders import Nominatim
 
 #Call this everytime the user tries to enter an address,
 #and have a popup saying: "Address Invalid, try using a different address format. Include the City."
@@ -29,8 +30,8 @@ def get_coords_by_addr(address):
         return (lat, long)
     except Exception as e:
         print("Invalid Address: " + address)
-        print("Using (0,0) as lat, long.")
-        return (0.0, 0.0)
+        print("Using (1,1) as lat, long.")
+        return (1.0, 1.0)
 
 def get_distance_between_coords(src_lat, src_long, dest_lat, dest_long):
     #params must be float type
