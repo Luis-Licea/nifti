@@ -185,97 +185,14 @@
           {% if not posts_and_their_tags %}
             <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
           {% else %}
+
+            <!-- Loop thru every post and its tags. -->
             {% for post, tags in posts_and_their_tags %}
-              <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
-                <div class="row g-0" style="margin-left: 0 !important;">
-                  <div class="col-md-8">
-                    <div class="card-body">
-
-                      <!-- User profile link. -->
-                      <h5 class="card-title">
-                        <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
-                      </h5>
-
-                      <!-- User profile creation date. -->
-                      <h6 class="card-subtitle mb-2 text-muted">
-                        {{ post.author.profile.date_created|date:"F d, Y" }}
-                      </h6>
-
-                      <!-- Post title hyperlink. -->
-                      <p class="card-text">
-                        <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                          {{ post.title }}
-                        </a>
-                      </p>
-
-                      <!-- Multiple tags per each post -->
-                      {% for tag in tags %}
-                        <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
-                          <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
-                        </a>
-                      {% endfor %}
-
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <!-- Display the post. -->
+              {% include 'search/post_result.html' %}
             {% endfor %}
+
           {% endif %}
-        <!-- Service/Task based Search -->
-
-
-        <!-- NOTE: Delete everything in comment? -->
-        {% comment %}
-        {% elif search_type == 'service' or search_type == 'task' %}
-          {% for post, tags in posts_and_their_tags %}
-            <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
-              <div class="row g-0" style="margin-left: 0 !important;">
-                <div class="col-md-8">
-                  <div class="card-body">
-
-                    <!-- Post title. -->
-                    <h5 class="card-title">
-                      <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: whitesmoke;">
-                      {{ post.title }}
-                      </a>
-                    </h5>
-
-                    <h6 class="card-subtitle mb-2 text-muted">
-
-                      <!-- Post author. -->
-                      <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
-
-                      <!-- Profile creation date. -->
-                      {{ user.profile.date_created|date:"F d, Y" }}
-
-                    </h6>
-
-                    <!-- Turn the profile description text into hyperlink pointing to the user profile. -->
-                    <p class="card-text">
-
-                      <!-- Post title. -->
-                      <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
-                        {{ post.title }}
-                      </a>
-                    </p>
-
-                    <!-- Multiple tags per each post -->
-                    {% for tag in tags %}
-                      <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
-                        <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
-                      </a>
-                    {% endfor %}
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          <p style="color:white;font-size:25px">Start your Nifti Search!</p>
-        {% endcomment %}
-
-
         {% endif %}
       </div>
     </div>

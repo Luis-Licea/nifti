@@ -1,0 +1,37 @@
+{% block post_block %}
+    {% if post %}
+        <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
+            <div class="row g-0" style="margin-left: 0 !important;">
+                <div class="col-md-8">
+                    <div class="card-body">
+
+                        <!-- User profile link. -->
+                        <h5 class="card-title">
+                        <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
+                        </h5>
+
+                        <!-- User profile creation date. -->
+                        <h6 class="card-subtitle mb-2 text-muted">
+                        {{ post.date_posted|date:"F d, Y" }}
+                        </h6>
+
+                        <!-- Post title hyperlink. -->
+                        <p class="card-text">
+                        <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                            {{ post.title }}
+                        </a>
+                        </p>
+
+                        <!-- Multiple tags per each post -->
+                        {% for tag in tags %}
+                        <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
+                            <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
+                        </a>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock post_block %}
