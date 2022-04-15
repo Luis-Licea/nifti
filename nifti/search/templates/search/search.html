@@ -6,6 +6,40 @@
 
 {% block content %}
 
+<script type="text/javascript">
+    // Get visitor coordinates as soon as the page is loaded.
+    window.onload = function get_coordinates(){
+
+        // Check if geolocation supported by the browser.
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(location){
+                // Store the latitude in the form element.
+                document.getElementById("latitude").value = location.coords.latitude;
+
+                // Store the longitude in the form element.
+                document.getElementById("longitude").value = location.coords.longitude;
+
+                // Notify user that distance-based search is ready.
+                document.getElementById("location_msg").innerHTML = "Ready to search.";
+
+                // Hide the label (the element does not take space).
+                document.getElementById("coordinate_status").style.display = "none";
+            });
+        } else{
+            document.getElementById("location_msg").innerHTML = "This browser does not support HTML5 geolocation.";
+        }
+    }
+</script>
+
+    <!-- Show that the coordinates are still loading. -->
+    <div id="location_msg">Finding your coordinates...</div>
+
+    <!-- Spinner disappears whether the coordinates are ready. -->
+    <div class="spinner-border" id="coordinate_status" role="coordinate_status"></div>
+
+    <!-- Click the button to load the coordinates. -->
+    <button type="button" onclick="get_position();">See My Position</button>
+
   <!-- Search form -->
   <div class="container-fluid">
 
@@ -17,6 +51,10 @@
       value=""
       >
 
+      <!-- Coordinates are empty by default. -->
+      <input type="hidden" id="latitude" name="latitude" value="" />
+      <input type="hidden" id="longitude" name="longitude" value="" />
+
       <!-- Show registration, login, and search messages. -->
       {% include 'home/messages.html' %}
 
@@ -27,7 +65,7 @@
         <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_string" value="{{search_string}}">
 
         <!-- Search button. -->
-        <button class="btn btn-outline-success" type="submit" value="Search" onclick="{{request.GET.username}}">Search</button>
+        <button class="btn btn-outline-success" type="submit" value="Search">Search</button>
       </div>
 
       <!-- Search bar options. -->

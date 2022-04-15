@@ -9,13 +9,13 @@ from django.urls import reverse
 # Create your models here.
 class Post(models.Model):
     # Associates a post to a profile
-    author = models.OneToOneField(User, on_delete=models.CASCADE)   #if time permits, make ForeignKey, and have multiple posts per user.
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     #TODO: add feature in frontend preventing entering more than 100 chars
     title = models.CharField(max_length=100,default='Post Title')
 
     # The HTML field containing the website contents.
-    body = RichTextField(default='')
+    body = RichTextField(default='', blank=True)
 
     #TODO: add feature in frontend preventing entering more than 100 chars
     address = models.CharField(max_length=200,default='')
@@ -23,7 +23,7 @@ class Post(models.Model):
     #address gets converted to lat, long to use distance-based search.
     latitude = models.DecimalField(max_digits=30, decimal_places=10, default=0.0)
     longitude = models.DecimalField(max_digits=30, decimal_places=10, default=0.0)
-    
+
     # The date the post was created.
     date_posted = models.DateTimeField(default=timezone.now)
 
@@ -36,7 +36,7 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
 #TODO: make a function add_tags() whenever a user submits/creates a post (Use signals in signals.py)
-class Tag(models.Model):   
+class Tag(models.Model):
     #TODO: frontend feature preventing entering more than 20 chars per tag.
     tag_name = models.CharField(max_length=20)
 
