@@ -180,7 +180,8 @@ CKEDITOR_CONFIGS = {
 }
 
 # Allows users to sign in to their gmail through Django
-# Add the following lines at the end of the file <project>/env/bin/activate
+# Add the following lines at the end of the file <project>/env/bin/activate when
+# working locally or /etc/apache2/envvars when using a production server.
 # export EMAIL_USER="<your email>@gmail.com"
 # export EMAIL_PASS="<your App Password>"
 # In order to obtain an <App Password>, go to https://myaccount.google.com/ to
