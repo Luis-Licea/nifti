@@ -76,13 +76,19 @@ def search(request):
   search_string: str = request.GET.get('search_string') if request.GET.get('search_string') else "";
   # Get result ordering.
   search_order: str = request.GET.get('search_order')
+  # Get user's latitude.
+  search_latitude: str = request.GET.get('search_latitude') if request.GET.get('search_latitude') else "";
+  # Get user's longitude.
+  search_longitude: str = request.GET.get('search_longitude') if request.GET.get('search_longitude') else "";
 
   context = {
     'search_option': search_option,
     'search_order': search_order,
     'search_string': search_string,
+    'search_latitude': search_latitude,
+    'search_longitude': search_longitude,
   }
-  
+
   # Verify that the search is not empty.
   if(request.GET and search_string):
     if(search_option == "user"):
