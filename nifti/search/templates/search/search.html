@@ -19,11 +19,14 @@
                 // Store the longitude in the form element.
                 document.getElementById("longitude").value = location.coords.longitude;
 
-                // Notify user that distance-based search is ready.
-                document.getElementById("location_msg").innerHTML = "Ready to search.";
+                // Remove location message to show search is ready.
+                document.getElementById("location_msg").style.display = "none";
 
                 // Hide the label (the element does not take space).
                 document.getElementById("coordinate_status").style.display = "none";
+
+                // Enable button when searching is ready.
+                document.getElementById("search_button").disabled = false;
             });
         } else{
             document.getElementById("location_msg").innerHTML = "This browser does not support HTML5 geolocation.";
@@ -32,13 +35,10 @@
 </script>
 
     <!-- Show that the coordinates are still loading. -->
-    <div id="location_msg">Finding your coordinates...</div>
+    <div id="location_msg">Finding your location...</div>
 
     <!-- Spinner disappears whether the coordinates are ready. -->
     <div class="spinner-border" id="coordinate_status" role="coordinate_status"></div>
-
-    <!-- Click the button to load the coordinates. -->
-    <button type="button" onclick="get_position();">See My Position</button>
 
   <!-- Search form -->
   <div class="container-fluid">
@@ -65,7 +65,7 @@
         <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_string" value="{{search_string}}">
 
         <!-- Search button. -->
-        <button class="btn btn-outline-success" type="submit" value="Search">Search</button>
+        <button class="btn btn-outline-success" id="search_button" type="submit" value="Search" disabled>Search</button>
       </div>
 
       <!-- Search bar options. -->
