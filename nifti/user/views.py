@@ -69,7 +69,6 @@ def profile_detail(request, username):
     # Get the user whose username matches the url parameter.
     user = User.objects.get(username=username)
     context = {
-      'user': user,
-      'static_view': True,
+      'other_user': user,
     }
-    return render(request, 'user/profile.html', context)
+    return render(request, 'user/profile_static.html', context)

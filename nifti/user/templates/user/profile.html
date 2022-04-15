@@ -16,23 +16,6 @@
     {% include 'home/messages.html' %}
 
     <div class="media">
-        {% if static_view %}
-        <div class="media-body">
-            <!-- Show profile picture. -->
-            <img class="rounded-circle account-img" style="margin-top: 3em; border: 10px solid #ced4da;" src={{user.profile.profile_picture.url}}>
-
-            <!-- Show username. -->
-            <h2 class="account-heading" style="margin-top: revert;">{{user.username}}</h2>
-
-            <!-- Show email. -->
-            <p class="text-secondary">{{user.email}}</p>
-
-            <!-- Show rich text. -->
-            <div style="text-align: left;">{{user.profile.body|safe}}</div>
-        </div>
-        {% endif %}
-
-        {% if not static_view %}
         <form method="post" enctype="multipart/form-data">
 
             <!-- Show registration, login, update, and search messages. -->
@@ -69,21 +52,9 @@
                 </div>
 
             </div>
+
         </form>
-
-        {% endif %}
-
-        {% if static_view %}
-            <div class="card-body">
-
-                <!-- Reset Password Button. -->
-                <a href="{% url 'password_reset' %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Reset Password</a>
-
-                <!-- Delete Account Button. -->
-                <a href="{% url 'home-unregister' %}" class="btn btn-outline-danger" style="display: block; margin-bottom: 0.5rem;" role="button">Delete Account</a>
-
-            </div>
-        {% endif %}
     </div>
+
 </div>
 {% endblock content %}

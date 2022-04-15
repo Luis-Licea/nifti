@@ -1,0 +1,47 @@
+{% extends 'home/base.html' %}
+<!-- Load needed css files. -->
+{% load static %}
+<!-- Needed to auto-format forms using the |cripsy function. -->
+{% load crispy_forms_tags %}
+<!-- Custom CSS -->
+{% block style %}
+<!-- The profile.css file is needed to make the profile picture look circular. -->
+<link rel="stylesheet" href="{% static 'user/profile.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="content-section" style="margin-top: 3em;">
+
+    <!-- Show registration, login, update, and search messages. -->
+    {% include 'home/messages.html' %}
+
+    <div class="media">
+        <div class="media-body">
+            <!-- Show profile picture. -->
+            <img class="rounded-circle account-img" style="margin-top: 3em; border: 10px solid #ced4da;" src={{other_user.profile.profile_picture.url}}>
+
+            <!-- Show username. -->
+            <h2 class="account-heading" style="margin-top: revert;">{{other_user.username}}</h2>
+
+            <!-- Show email. -->
+            <p class="text-secondary">{{other_user.email}}</p>
+
+            <!-- Show rich text. -->
+            <div style="text-align: left;">{{other_user.profile.body|safe}}</div>
+        </div>
+
+        <!-- If the user who is logged in is the owner of the profile, allow reset password and delete account buttons. -->
+        {% if other_user == user %}
+            <div class="card-body">
+
+                <!-- Reset Password Button. -->
+                <a href="{% url 'password_reset' %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Reset Password</a>
+
+                <!-- Delete Account Button. -->
+                <a href="{% url 'home-unregister' %}" class="btn btn-outline-danger" style="display: block; margin-bottom: 0.5rem;" role="button">Delete Account</a>
+
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
