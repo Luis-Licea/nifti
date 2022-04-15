@@ -74,6 +74,24 @@ body {
   display: flex;
 }
 
+/* Style the (dropdown) select button. */
+#select {
+  /* Do not specify a fixed size, let size be dynamic. */
+  width: auto;
+  /* Center-align the text. The text-align tag does not work. */
+  text-align-last: center;
+  /* Remove padding, it makes the buttons look ugly. */
+  padding-right: 0;
+}
+
+/* Chrome only: Style the (dropdown) select options. */
+optgroup, option {
+  /* Left-align dropdown options. */
+  text-align: left;
+  /* Remove left padding, which makes options look ugly. */
+  padding-left: 0;
+}
+
 /* Adjust the top borders when the viewing the image in a smaller screen. */
 @media only screen and (max-width: 740px){
   .responsive {
@@ -93,5 +111,28 @@ body {
   }
   .form-switch {
     padding-top: 0.5em;
+  }
+}
+/* Resize search buttons when the screen is smaller than 500px. */
+@media only screen and (max-width: 500px){
+  /* Display search options vertically; a horizontal line is too long. */
+  #options {
+    display: grid;
+  }
+
+  /* Ensures that buttons are the same width as the drowpdown select. */
+  .btn-group>.btn-group:not(:first-child), .btn-group>.btn:not(:first-child) {
+    margin-left: 0;
+  }
+  /* Style the first button label. */
+  #first-label {
+    /* Make the top edges round, and the bottom edges sharp. */
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+
+  /* Style the last button, the dropdown select. */
+  #select {
+    /* Make the top edges sharp, and the bottom edges round. */
+    border-radius: 0 0 0.25rem 0.25rem;
   }
 }

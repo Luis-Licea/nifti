@@ -84,8 +84,7 @@
       </div>
 
       <!-- Search bar options. -->
-
-      <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="width: inherit; margin-top: 0.5rem;">
+      <div class="btn-group" id="options" role="group" aria-label="Basic radio toggle button group" style="width: inherit; margin-top: 0.5rem;">
 
         {% with service='service' task='task' user='user' distance='distance' %}
         <!-- Service switch. -->
@@ -97,7 +96,7 @@
             {% comment %} Select service if search option is service. {% endcomment %}
             checked
           {% endif %}>
-        <label class="btn btn-outline-primary" for="btnradio1">{{service.capitalize}}</label>
+        <label id="first-label" class="btn btn-outline-primary" for="btnradio1">{{service.capitalize}}</label>
 
         <!-- Task switch. -->
         <input type="radio" class="btn-check" name="search_option" id="btnradio2" autocomplete="off" value="{{task}}" {% if search_option == task %}checked{% endif %}>
@@ -109,7 +108,7 @@
         {% endwith %}
 
         <!-- Search result order. -->
-        <select name="search_order" id="select" class="form-select bg-dark" aria-label="Ordering selection" style="width: auto;">
+        <select name="search_order" id="select" class="form-select bg-dark" aria-label="Ordering selection">
 
           {% with closest='closest' furthest='furthest' alphabetical='alphabetical' reversed='reversed' %}
           <optgroup label="Distance">
