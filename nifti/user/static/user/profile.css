@@ -1,6 +1,23 @@
-/* Make the profile picture look circular. */
 .account-img {
+    /* Make the profile picture look circular. */
     object-fit: cover;
-    width:400px;
-    height:400px;
+    width:300px;
+    height:300px;
+
+    /* Place border around profile picture. */
+    border: 10px solid #ced4da;
+}
+
+/* Resize profile picture when the screen is smaller than 500px. */
+@media only screen and (max-width: 500px){
+
+    .account-img {
+        /* Shrink image dimensions. */
+        width:200px;
+        height:200px;
+
+        /* Make image border thiner. */
+        border: 5px solid #ced4da;
+    }
+
 }
