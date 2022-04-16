@@ -7,4 +7,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
   path('<str:username>/', views.profile_detail, name='user-static-profile'),
+  path('<str:username>/ads/', views.PostListView.as_view(), name='user-post-list'),
 ]

@@ -30,20 +30,18 @@
 
         </div>
 
-        {% if object.author == user %}
+        <!-- View All Posts by Author Button. -->
+        <a href="{% url 'user-post-list' object.author %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Posts by {{object.author}}</a>
+
         <!-- Account Settings. -->
-        <!-- <div class="card my-3 bg-transparent"> -->
-            <!-- <h5 class="card-header">Post Settings</h5> -->
-            <!-- <div class="card-body"> -->
+        {% if object.author == user %}
 
-                <!-- Edit Post Button. -->
-                <a href="{% url 'post-update' object.id %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Edit Post</a>
+        <!-- Edit Post Button. -->
+        <a href="{% url 'post-update' object.id %}" class="btn btn-outline-info" style="display: block; margin-bottom: 0.5rem;" role="button">Edit Post</a>
 
-                <!-- Delete Post Button. -->
-                <a href="{% url 'post-delete' object.id %}" class="btn btn-outline-danger" style="display: block; " role="button">Delete Post</a>
+        <!-- Delete Post Button. -->
+        <a href="{% url 'post-delete' object.id %}" class="btn btn-outline-danger" style="display: block; " role="button">Delete Post</a>
 
-            <!-- </div> -->
-        <!-- </div> -->
         {% endif %}
 
     </div>

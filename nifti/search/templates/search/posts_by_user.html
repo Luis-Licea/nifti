@@ -1,0 +1,28 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'search/search.css' %}">
+{% endblock style %}
+{% block content %}
+
+  <!-- Leave blank space at the top and bottom of the page. -->
+  <div style="margin: 3em 0;" >
+
+    <!-- User profile creation date. -->
+    <h2 class="text-muted" style="margin: 2rem;">
+        Advertisements
+    </h2>
+
+    <!-- Show registration, post, login, etc messages. -->
+    {% include 'home/messages.html' %}
+
+    <!-- Loop thru every user post. -->
+    {% for post in posts %}
+        <!-- Display post result. -->
+        {% include 'search/post_result.html' %}
+    {% endfor %}
+
+  </div>
+
+
+{% endblock content %}

@@ -101,19 +101,6 @@ def search(request):
 
   return render(request, 'search/search.html', context)
 
-# class PostListView(ListView):
-#   model = Post
-#   template_name = 'search/search.html'
-#   context_object_name = 'posts'
-#   # ordering = ['date_posted']
-#   ordering = ['-date_posted']
-
-#   def get_queryset(self):
-#     # print(self.request.GET)
-#     # return search(self.request)
-#     # query = self.request.GET.get('q')
-#     # return Post.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
-
 class PostDetailView(DetailView):
   model = Post
 

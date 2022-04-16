@@ -19,7 +19,7 @@
         <a class="nav-link{% if request.path == search %} active" aria-current="page" {% else %}"{% endif %} href="{{ search }}">Search</a>
         {% if user.is_authenticated %}
           <a class="nav-link{% if request.path == profile %} active" aria-current="page" {% else %}"{% endif %} href="{{ profile }}">Profile</a>
-          <a class="nav-link{% if request.path == create_post %} active" aria-current="page" {% else %}"{% endif %} href="{{ create_post }}">Post Ad</a>
+          <a class="nav-link{% if request.path == create_post %} active" aria-current="page" {% else %}"{% endif %} href="{{ create_post }}">New Ad</a>
           <a class="nav-link{% if request.path == logout %} active" aria-current="page" {% else %}"{% endif %} href="{{ logout }}">Logout</a>
         {% else %}
           <a class="nav-link{% if request.path == login %} active" aria-current="page" {% else %}"{% endif %} href="{{ login }}">Login</a>

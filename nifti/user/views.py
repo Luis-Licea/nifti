@@ -5,6 +5,9 @@ from django.contrib import messages
 from home.forms import UserUpdateForm, ProfileUpdateForm
 from .forms import UserDeleteForm
 from django.contrib.auth.models import User
+from django.views.generic import ListView
+from search.models import Post
+
 # Create your views here.
 
 @login_required
@@ -72,3 +75,28 @@ def profile_detail(request, username):
       'other_user': user,
     }
     return render(request, 'user/profile_static.html', context)
+
+class PostListView(ListView):
+  model = Post
+  template_name = 'search/posts_by_user.html'
+  context_object_name = 'posts'
+
+  # Get oldest posts first.
+  ordering = ['-date_posted']
+
+  # Get newest posts first.
+  # ordering = ['date_posted']
+
+  def get_queryset(self):
+    # Get the username from the URL, as defined in urls.py.
+    username = self.kwargs['username']
+
+    # Get the user with the matching username.
+    user = User.objects.get(username=username)
+
+    # Return posts created by the user.
+    return Post.objects.filter(author=user)
+
+    # print(self.request.GET)
+    # query = self.request.GET.get('q')
+    # return Post.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
