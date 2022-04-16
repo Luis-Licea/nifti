@@ -30,8 +30,8 @@
             <div style="text-align: left;">{{other_user.profile.body|safe}}</div>
         </div>
 
-        <!-- View All Posts by Author Button. -->
-        <a href="{% url 'user-post-list' other_user %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Posts by {{other_user}}</a>
+        <!-- View All Ads by Author Button. -->
+        <a href="{% url 'user-post-list' other_user %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Ads by {{other_user}}</a>
 
         <!-- If the user who is logged in is the owner of the profile, allow reset password and delete account buttons. -->
         {% if other_user == user %}

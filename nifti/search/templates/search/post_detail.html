@@ -30,8 +30,8 @@
 
         </div>
 
-        <!-- View All Posts by Author Button. -->
-        <a href="{% url 'user-post-list' object.author %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Posts by {{object.author}}</a>
+        <!-- View All Ads by Author Button. -->
+        <a href="{% url 'user-post-list' object.author %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Ads by {{object.author}}</a>
 
         <!-- Account Settings. -->
         {% if object.author == user %}
