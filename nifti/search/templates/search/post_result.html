@@ -33,7 +33,7 @@
                         {% for tag in tags %}
                             <a href="{% url 'search-home' %}?search_latitude={{ search_latitude }}&search_longitude={{ search_longitude }}&search_string={{ tag.tag_name }}&search_option={{ search_option }}&search_order={{ search_order }}">
 
-                                <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
+                                <button class="btn" style="-webkit-text-fill-color: white !important; border-radius: 25px;" >{{ tag.tag_name }}</button>
                             </a>
                         {% endfor %}
 
