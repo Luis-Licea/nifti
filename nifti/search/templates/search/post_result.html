@@ -6,9 +6,11 @@
                     <div class="card-body">
 
                         <!-- Distance -->
-                        <p class="float-end" style="color:pink; right:0;">
-                            {{ distance|floatformat }} miles 
-                        </p>
+                        {% if distance %}
+                            <p class="float-end" style="color:pink; right:0;">
+                                {{ distance|floatformat }} miles
+                            </p>
+                        {% endif %}
 
                         <!-- User profile link. -->
                         <h5 class="card-title">
@@ -29,11 +31,12 @@
 
                         <!-- Multiple tags per each post -->
                         {% for tag in tags %}
-                            <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
+                            <a href="{% url 'search-home' %}?search_latitude={{ search_latitude }}&search_longitude={{ search_longitude }}&search_string={{ tag.tag_name }}&search_option={{ search_option }}&search_order={{ search_order }}">
+
                                 <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
                             </a>
                         {% endfor %}
-                     
+
                     </div>
                 </div>
             </div>
