@@ -24,12 +24,18 @@ def user_search(search_string, search_order):
   }
   return user_context
 
-#-- Service or Task
-def service_or_task_search(request, search_lat, search_long, search_string, search_order, search_option):
-  #-Get posts from searched string
+def get_posts_from_tag_name(search_string):
+  """Gets the posts associated to the tag in the search string.
+
+  This is a helper function, not a view function.
+
+  Args:
+      search_string (str): A string that contains any of the tags in the
+      database, such as 'gardening', 'cooking', 'construction', etc.
+  """
+  #-Get tags from searched string
   tags = Tag.objects.filter(Q(tag_name__icontains=search_string))
   posts = Post.objects.none()
-  post_count = 0
   #check posts associated with tags
   for tag in tags:
     tag_to_post_query_set = TagToPostTable.objects.filter(
@@ -37,18 +43,29 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
     )
     #get posts associated with tags
     for tag_to_post in tag_to_post_query_set:
-      serv_prov_bool = 1 if search_option == "service" else 0
+      is_service_provider = 1 if search_option == "service" else 0
       # adding to Post QuerySet
       posts = posts | Post.objects.filter(
-        Q(id=tag_to_post.post_id) & 
-        Q(service_provider=serv_prov_bool)
+        Q(id=tag_to_post.post_id) &
+        Q(service_provider=is_service_provider)
       )
+  return posts
+
+def get_post_tags(posts):
+  """Returns a 2-dimensional array of post tags. Each tag list corresponds to a
+  post that was passed in. For example:
+
+  # Post 1,        Post 2,     Post 3.
+  [[Tag1, Tag2], [Tag1, Tag3], [Tag4]]
+
+  Args:
+      posts (list): The list of posts that match the search.
+  """
   #-Get tags associated with each post
   temp_tags_from_post = [] #list of tags per each post
   post_tags = [] #double list of all tags per each post
   #check tags associated with posts
   for post in posts:
-    post_count = post_count + 1
     post_to_tag_query_set = TagToPostTable.objects.filter(
       Q(post_id=post.id)
     )
@@ -59,7 +76,15 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
         Q(id=post_to_tag.tag_id)
       ))
     post_tags.append(temp_tags_from_post)
-    temp_post_and_tags_tuple = (post, temp_tags_from_post)
+  return post_tags
+
+#-- Service or Task
+def service_or_task_search(request, search_lat, search_long, search_string, search_order, search_option):
+
+  # Get the posts associated to the tag in search string.
+  posts = get_posts_from_tag_name(search_string)
+
+  post_tags = get_post_tags(posts)
 
   #-Calculate and Order results based on distance
   #get distance list
@@ -90,13 +115,12 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
     temp_list.append(post_tags[i])
     temp_list.append(distances[i])
     posts_with_tags_and_distances.append(temp_list)
-  
+
   #-Context
   search_type = "service" if search_option == "service" else "task"
   service_or_task_context = {
     'search_type': search_type,
     'posts_with_tags_and_distances': posts_with_tags_and_distances,
-    #'post_count_range': range(post_count),
     #'posts': posts,
     #'post_tags': post_tags,
     #'distances': distances,
@@ -136,10 +160,10 @@ def search(request):
     elif(search_option == "service" or search_option == "task"):
       service_or_task_context = service_or_task_search(
         request,
-        search_latitude, 
-        search_longitude, 
-        search_string, 
-        search_order, 
+        search_latitude,
+        search_longitude,
+        search_string,
+        search_order,
         search_option
       )
       context.update(service_or_task_context) #merge service/task's context with generic context
