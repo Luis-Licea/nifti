@@ -182,12 +182,12 @@
           {% endif %}
         <!-- Service/Task based Search -->
         {% elif search_type == 'service' or search_type == 'task' %}
-          {% if not posts_and_their_tags %}
+          {% if not posts_with_tags_and_distances %}
             <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
           {% else %}
 
             <!-- Loop thru every post and its tags. -->
-            {% for post, tags in posts_and_their_tags %}
+            {% for post, tags, distance in posts_with_tags_and_distances %}
               <!-- Display the post. -->
               {% include 'search/post_result.html' %}
             {% endfor %}

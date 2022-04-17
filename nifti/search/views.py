@@ -12,6 +12,7 @@ from django.views.generic import (
 )
 from user.models import Profile
 from .distance_calculation import get_distance_between_coords
+import numpy
 
 #-- User
 def user_search(search_string, search_order):
@@ -24,10 +25,11 @@ def user_search(search_string, search_order):
   return user_context
 
 #-- Service or Task
-def service_or_task_search(search_string, search_order, search_option):
+def service_or_task_search(request, search_lat, search_long, search_string, search_order, search_option):
   #-Get posts from searched string
   tags = Tag.objects.filter(Q(tag_name__icontains=search_string))
   posts = Post.objects.none()
+  post_count = 0
   #check posts associated with tags
   for tag in tags:
     tag_to_post_query_set = TagToPostTable.objects.filter(
@@ -42,10 +44,11 @@ def service_or_task_search(search_string, search_order, search_option):
         Q(service_provider=serv_prov_bool)
       )
   #-Get tags associated with each post
-  posts_and_their_tags = [] #list of type: [post_id, (list of tags)]
   temp_tags_from_post = [] #list of tags per each post
+  post_tags = [] #double list of all tags per each post
   #check tags associated with posts
   for post in posts:
+    post_count = post_count + 1
     post_to_tag_query_set = TagToPostTable.objects.filter(
       Q(post_id=post.id)
     )
@@ -55,13 +58,48 @@ def service_or_task_search(search_string, search_order, search_option):
       temp_tags_from_post.append(Tag.objects.get(
         Q(id=post_to_tag.tag_id)
       ))
+    post_tags.append(temp_tags_from_post)
     temp_post_and_tags_tuple = (post, temp_tags_from_post)
-    posts_and_their_tags.append(temp_post_and_tags_tuple)
+
+  #-Calculate and Order results based on distance
+  #get distance list
+  distances = []
+  for post in posts:
+    if(request.user.id != post.author_id and get_distance_between_coords(float(search_lat), float(search_long), post.latitude, post.longitude) == 0):
+      distances.append("My Current Location.")
+    else:
+      distances.append(get_distance_between_coords(float(search_lat), float(search_long), post.latitude, post.longitude))
+
+  #sort lists according to distance
+  distances = numpy.array(distances)
+  index_distance_order = distances.argsort()
+  #re-order arrays according to distance. Least to Greatest.
+  post_tags = numpy.array(post_tags,dtype=object)
+  posts = numpy.array(posts)
+  distances = numpy.array(distances)
+
+  post_tags = post_tags[index_distance_order].tolist()
+  posts = posts[index_distance_order].tolist()
+  distances = distances[index_distance_order].tolist()
+
+  #Put all the values into one big list. Because don't know how to iterate by index in templates.
+  posts_with_tags_and_distances = [] #array of type: post, list of tags, distance
+  for i in range(len(distances)):
+    temp_list = []
+    temp_list.append(posts[i])
+    temp_list.append(post_tags[i])
+    temp_list.append(distances[i])
+    posts_with_tags_and_distances.append(temp_list)
   
+  #-Context
   search_type = "service" if search_option == "service" else "task"
   service_or_task_context = {
     'search_type': search_type,
-    'posts_and_their_tags': posts_and_their_tags,
+    'posts_with_tags_and_distances': posts_with_tags_and_distances,
+    #'post_count_range': range(post_count),
+    #'posts': posts,
+    #'post_tags': post_tags,
+    #'distances': distances,
   }
   return service_or_task_context
 
@@ -96,7 +134,14 @@ def search(request):
       context.update(user_context) #merge user's context with generic context
 
     elif(search_option == "service" or search_option == "task"):
-      service_or_task_context = service_or_task_search(search_string, search_order, search_option)
+      service_or_task_context = service_or_task_search(
+        request,
+        search_latitude, 
+        search_longitude, 
+        search_string, 
+        search_order, 
+        search_option
+      )
       context.update(service_or_task_context) #merge service/task's context with generic context
 
   return render(request, 'search/search.html', context)

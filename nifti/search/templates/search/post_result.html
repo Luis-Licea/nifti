@@ -5,6 +5,11 @@
                 <div class="col-md-8">
                     <div class="card-body">
 
+                        <!-- Distance -->
+                        <p class="float-end" style="color:pink; right:0;">
+                            {{ distance|floatformat }} miles 
+                        </p>
+
                         <!-- User profile link. -->
                         <h5 class="card-title">
                         <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' post.author %}">{{ post.author }}</a>
@@ -24,11 +29,11 @@
 
                         <!-- Multiple tags per each post -->
                         {% for tag in tags %}
-                        <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
-                            <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
-                        </a>
+                            <a href="{% url 'search-home' %}?search_string={{ tag.tag_name }}&search_option={{ search_type }}&search_order=closest">
+                                <button class="btn" style="-webkit-text-fill-color:pink !important" >{{ tag.tag_name }}</button>
+                            </a>
                         {% endfor %}
-
+                     
                     </div>
                 </div>
             </div>
