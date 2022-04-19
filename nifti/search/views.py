@@ -16,7 +16,7 @@ from .distance_calculation import get_distance_between_coords, check_address_val
 import numpy
 
 #-- User
-def user_search(search_string, search_by):
+def user_search(search_string):
   users = User.objects.filter(Q(username__icontains=search_string))
   search_type = "user"
   user_context = {
@@ -45,7 +45,7 @@ def get_posts_from_tag_name(search_string, search_option):
     )
     #get posts associated with tags
     for tag_to_post in tag_to_post_query_set:
-      is_service_provider = 1 if search_option == "service" else 0
+      is_service_provider: bool = 1 if search_option == "service" else 0
       # adding to Post QuerySet
       posts = posts | Post.objects.filter(
         Q(id=tag_to_post.post_id) &
@@ -80,37 +80,59 @@ def get_post_tags(posts):
     post_tags.append(temp_tags_from_post)
   return post_tags
 
-#-- Service or Task
-def service_or_task_search(request, search_lat, search_long, search_string, search_by, search_option):
+def get_post_distances(posts, request, search_lat, search_long):
+  """Returns the distance associated to each post in the list. The distances are
+  in the same order as the posts.
 
-  # Get the posts associated to the tag in search string.
-  posts = get_posts_from_tag_name(search_string, search_option)
-  print("Posts:", posts)
-
-  post_tags = get_post_tags(posts)
-  print("Post tags:", post_tags)
-
-  #-Calculate and Order results based on distance
-  #get distance list
+  Args:
+      posts (list): The list of posts that match the search query.
+  """
+  # Create empty distance list.
   distances = []
   for post in posts:
+    # TODO: Get current user so that following logic works.
     if(request.user.id != post.author_id and get_distance_between_coords(float(search_lat), float(search_long), post.latitude, post.longitude) == 0):
       distances.append("My Current Location.")
     else:
       distances.append(get_distance_between_coords(float(search_lat), float(search_long), post.latitude, post.longitude))
 
-  #sort lists according to distance
-  distances = numpy.array(distances)
-  index_distance_order = distances.argsort()
+  #get distance list
+  return distances
 
-  #re-order arrays according to distance. Least to Greatest.
-  post_tags = numpy.array(post_tags,dtype=object)
+#-- Service or Task
+def service_or_task_search(request, search_lat, search_long, search_string, search_by, search_option):
+
+  if search_by == 'tag':
+    # Get posts associated to the tag.
+    posts = get_posts_from_tag_name(search_string, search_option)
+  elif search_by == 'title':
+    # Get posts by title.
+    posts = Post.objects.filter(Q(title__icontains=search_string))
+
+  # View the posts in the terminal.
+  print("Posts:", posts)
+
+  # Get the distance from current location for each post.
+  distances = get_post_distances(posts, request, search_lat, search_long)
+  print("Distances:", distances)
+
+  # Convert lists to numpy arrays.
   posts = numpy.array(posts)
   distances = numpy.array(distances)
 
-  post_tags = post_tags[index_distance_order].tolist()
+  #sort lists according to distance
+  index_distance_order = distances.argsort()
+  print("Index distance order", index_distance_order)
+
+  #re-order arrays according to distance. Least to Greatest.
+  # Convert numpy array to Python list.
   posts = posts[index_distance_order].tolist()
   distances = distances[index_distance_order].tolist()
+
+  # Get the tags associated to each post after the posts have been
+  # sorted by distance.
+  post_tags = get_post_tags(posts)
+  print("Post tags:", post_tags)
 
   #Put all the values into one big list. Because don't know how to iterate by index in templates.
   posts_with_tags_and_distances = [] #array of type: post, list of tags, distance
@@ -141,7 +163,7 @@ def search(request):
   search_option: str = request.GET.get('search_option')
   # Get search string from search bar if it exists, else get an empty string.
   search_string: str = request.GET.get('search_string') if request.GET.get('search_string') else "";
-  # Get result ordering.
+  # Get search by tag or title.
   search_by: str = request.GET.get('search_by')
   # Get user's latitude.
   search_latitude: str = request.GET.get('search_latitude') if request.GET.get('search_latitude') else "";
@@ -159,7 +181,7 @@ def search(request):
   # Verify that the search is not empty.
   if(request.GET and search_string):
     if(search_option == "user"):
-      user_context = user_search(search_string, search_by)
+      user_context = user_search(search_string)
       context.update(user_context) #merge user's context with generic context
 
     elif(search_option == "service" or search_option == "task"):
