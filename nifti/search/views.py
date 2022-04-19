@@ -99,6 +99,13 @@ def get_post_distances(posts, request, search_lat, search_long):
   #get distance list
   return distances
 
+def get_posts_from_title(search_string, search_option):
+  # Determine if search is for service provider.
+  is_service_provider: bool = 1 if search_option == "service" else 0
+  # Filter the posts using the title and service provider values.
+  return Post.objects.filter(Q(title__icontains=search_string) &
+                              Q(service_provider=is_service_provider))
+
 #-- Service or Task
 def service_or_task_search(request, search_lat, search_long, search_string, search_by, search_option):
 
@@ -107,7 +114,7 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
     posts = get_posts_from_tag_name(search_string, search_option)
   elif search_by == 'title':
     # Get posts by title.
-    posts = Post.objects.filter(Q(title__icontains=search_string))
+    posts = get_posts_from_title(search_string, search_option)
 
   # View the posts in the terminal.
   print("Posts:", posts)
