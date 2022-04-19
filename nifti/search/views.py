@@ -16,7 +16,7 @@ from .distance_calculation import get_distance_between_coords, check_address_val
 import numpy
 
 #-- User
-def user_search(search_string, search_order):
+def user_search(search_string, search_by):
   users = User.objects.filter(Q(username__icontains=search_string))
   search_type = "user"
   user_context = {
@@ -81,7 +81,7 @@ def get_post_tags(posts):
   return post_tags
 
 #-- Service or Task
-def service_or_task_search(request, search_lat, search_long, search_string, search_order, search_option):
+def service_or_task_search(request, search_lat, search_long, search_string, search_by, search_option):
 
   # Get the posts associated to the tag in search string.
   posts = get_posts_from_tag_name(search_string, search_option)
@@ -142,7 +142,7 @@ def search(request):
   # Get search string from search bar if it exists, else get an empty string.
   search_string: str = request.GET.get('search_string') if request.GET.get('search_string') else "";
   # Get result ordering.
-  search_order: str = request.GET.get('search_order')
+  search_by: str = request.GET.get('search_by')
   # Get user's latitude.
   search_latitude: str = request.GET.get('search_latitude') if request.GET.get('search_latitude') else "";
   # Get user's longitude.
@@ -150,7 +150,7 @@ def search(request):
 
   context = {
     'search_option': search_option,
-    'search_order': search_order,
+    'search_by': search_by,
     'search_string': search_string,
     'search_latitude': search_latitude,
     'search_longitude': search_longitude,
@@ -159,7 +159,7 @@ def search(request):
   # Verify that the search is not empty.
   if(request.GET and search_string):
     if(search_option == "user"):
-      user_context = user_search(search_string, search_order)
+      user_context = user_search(search_string, search_by)
       context.update(user_context) #merge user's context with generic context
 
     elif(search_option == "service" or search_option == "task"):
@@ -168,7 +168,7 @@ def search(request):
         search_latitude,
         search_longitude,
         search_string,
-        search_order,
+        search_by,
         search_option
       )
       context.update(service_or_task_context) #merge service/task's context with generic context

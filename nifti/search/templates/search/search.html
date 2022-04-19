@@ -107,18 +107,13 @@
         <label class="btn btn-outline-primary" for="btnradio3">{{user.capitalize}}</label>
         {% endwith %}
 
-        <!-- Search result order. -->
-        <select name="search_order" id="select" class="form-select bg-dark" aria-label="Ordering selection">
+        <!-- Search results by. -->
+        <select name="search_by" id="select" class="form-select bg-dark" aria-label="Search results by">
 
-          {% with closest='closest' furthest='furthest' alphabetical='alphabetical' reversed='reversed' %}
-          <optgroup label="Distance">
-            <option value="{{closest}}" {% if search_order == closest %}selected{% endif %}>{{closest.capitalize}}</option>
-            <option value="{{furthest}}" {% if search_order == furthest %}selected{% endif %}>{{furthest.capitalize}}</option>
-          </optgroup>
-
-          <optgroup label="Title Name">
-            <option value="{{alphabetical}}" {% if search_order == alphabetical %}selected{% endif %}>{{alphabetical.capitalize}}</option>
-            <option value="{{reversed}}" {% if search_order == reversed %}selected{% endif %}>{{reversed.capitalize}}</option>
+          {% with tag='tag' title='title' %}
+          <optgroup label="Search by">
+            <option value="{{tag}}" {% if search_by == tag %}selected{% endif %}>{{tag.capitalize}}</option>
+            <option value="{{title}}" {% if search_by == title %}selected{% endif %}>{{title.capitalize}}</option>
           </optgroup>
           {% endwith %}
 
