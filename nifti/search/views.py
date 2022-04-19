@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render
+from django.contrib import messages
 from django.views.generic import (
   CreateView,
   DetailView,
@@ -11,7 +12,7 @@ from django.views.generic import (
   DeleteView,
 )
 from user.models import Profile
-from .distance_calculation import get_distance_between_coords
+from .distance_calculation import get_distance_between_coords, check_address_valid
 import numpy
 
 #-- User
@@ -83,8 +84,10 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
 
   # Get the posts associated to the tag in search string.
   posts = get_posts_from_tag_name(search_string)
+  print("Posts:", posts)
 
   post_tags = get_post_tags(posts)
+  print("Post tags:", post_tags)
 
   #-Calculate and Order results based on distance
   #get distance list
@@ -98,6 +101,7 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
   #sort lists according to distance
   distances = numpy.array(distances)
   index_distance_order = distances.argsort()
+
   #re-order arrays according to distance. Least to Greatest.
   post_tags = numpy.array(post_tags,dtype=object)
   posts = numpy.array(posts)
@@ -231,11 +235,32 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     This method needs to be overridden because a post needs an author before
     being created.
     """
-    # TODO: Validate address and get coordinates before posting the form.
+
+    # Print the address in the update form.
+    print("form address:", form.instance.address)
+
+    # Get the address from the submitted update form.
+    address = form.instance.address
+
+    # Validate the address.
+    is_address_valid = check_address_valid(address)
+
+    # If the address is not valid:
+    if not is_address_valid:
+      # Show a warning saying the address is invalid.
+      messages.warning(self.request, f'The address "{address}" is not valid.')
+
+      # Pass the existing form as the context, otherwise the post update form
+      # will be empty when the user is redirected to the form.
+      context = { 'form': form }
+      return render(self.request, 'search/post_form.html', context)
 
     # Make the form author be the user who is logged in and making the
     # request.
     form.instance.author = self.request.user
+
+    # Show a success message when the post is saved.
+    messages.success(self.request, f'The post has been updated.')
     return super().form_valid(form)
 
   def test_func(self):

@@ -10,6 +10,7 @@ def check_address_valid(address):
         #Address Format: Number Street, City
         nifti_locator_app = Nominatim(user_agent="nifti_web_app")
         location = nifti_locator_app.geocode(address)
+        print("Location:", location)
         if(location != None):
             return True
         else:

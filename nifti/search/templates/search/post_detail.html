@@ -13,6 +13,12 @@
 <div class="content-section">
     <div class="media">
         <div class="media-body">
+
+            <div style="margin-top: 3rem; margin-bottom: -3rem;">
+                <!-- Show registration, post, login, etc messages. -->
+                {% include 'home/messages.html' %}
+            </div>
+
             <!-- Show profile picture. -->
             <img class="rounded-circle account-img" style="margin-top: 3em;" src={{object.author.profile.profile_picture.url}}>
 
