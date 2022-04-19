@@ -25,7 +25,7 @@ def user_search(search_string, search_order):
   }
   return user_context
 
-def get_posts_from_tag_name(search_string):
+def get_posts_from_tag_name(search_string, search_option):
   """Gets the posts associated to the tag in the search string.
 
   This is a helper function, not a view function.
@@ -33,6 +33,7 @@ def get_posts_from_tag_name(search_string):
   Args:
       search_string (str): A string that contains any of the tags in the
       database, such as 'gardening', 'cooking', 'construction', etc.
+      search_option (str): Whether the search is for a task, service or user.
   """
   #-Get tags from searched string
   tags = Tag.objects.filter(Q(tag_name__icontains=search_string))
@@ -83,7 +84,7 @@ def get_post_tags(posts):
 def service_or_task_search(request, search_lat, search_long, search_string, search_order, search_option):
 
   # Get the posts associated to the tag in search string.
-  posts = get_posts_from_tag_name(search_string)
+  posts = get_posts_from_tag_name(search_string, search_option)
   print("Posts:", posts)
 
   post_tags = get_post_tags(posts)
