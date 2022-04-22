@@ -81,11 +81,8 @@ class PostListView(ListView):
   template_name = 'search/posts_by_user.html'
   context_object_name = 'posts'
 
-  # Get oldest posts first.
-  ordering = ['-date_posted']
-
-  # Get newest posts first.
-  # ordering = ['date_posted']
+  # The number of posts to show per page.
+  paginate_by = 5
 
   def get_queryset(self):
     # Get the username from the URL, as defined in urls.py.
@@ -95,7 +92,8 @@ class PostListView(ListView):
     user = User.objects.get(username=username)
 
     # Return posts created by the user.
-    return Post.objects.filter(author=user)
+    # Order the results from newest to olderst.
+    return Post.objects.filter(author=user).order_by('-date_posted')
 
     # print(self.request.GET)
     # query = self.request.GET.get('q')

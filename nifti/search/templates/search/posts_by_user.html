@@ -8,9 +8,9 @@
   <!-- Leave blank space at the top and bottom of the page. -->
   <div style="margin: 3em 0;" >
 
-    <!-- User profile creation date. -->
+    <!-- Show number of advertisements. -->
     <h2 class="text-muted" style="margin: 2rem;">
-        Advertisements
+        Advertisements ({{ page_obj.paginator.count }})
     </h2>
 
     <!-- Show registration, post, login, etc messages. -->
@@ -22,7 +22,31 @@
         {% include 'search/post_result.html' %}
     {% endfor %}
 
-  </div>
+    <!-- If paginated, show pagination links: -->
+    {% if is_paginated %}
 
+      <!-- Show link to first and previous pages. -->
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-primary" href="?page=1">First</a>
+        <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      <!-- Show link for the last two and the following two pages. -->
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-primary" href="?page={{num}}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-primary" href="?page={{num}}">{{num}}</a>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Show link for the next and last pages. -->
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+  </div>
 
 {% endblock content %}
