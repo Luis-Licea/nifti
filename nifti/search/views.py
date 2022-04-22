@@ -263,9 +263,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     # Make the form author be the user who is logged in and making the
     # request.
     form.instance.author = self.request.user
-    
+
     # Show a success message when the post is saved.
-    messages.success(self.request, f'The post has been created.')
+    messages.success(self.request, 'The post has been created.')
     return super().form_valid(form)
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -310,7 +310,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form.instance.author = self.request.user
 
     # Show a success message when the post is saved.
-    messages.success(self.request, f'The post has been updated.')
+    messages.success(self.request, 'The post has been updated.')
     return super().form_valid(form)
 
   def test_func(self):

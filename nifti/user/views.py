@@ -40,12 +40,10 @@ def profile(request):
     # Create empty forms.
     u_form = UserUpdateForm(instance=request.user)
     p_form = ProfileUpdateForm(instance=request.user.profile)
-    username = request.user
-  
+
   context = {
     'u_form': u_form,
     'p_form': p_form,
-    'username': username,
   }
   return render(request, 'user/profile.html', context)
 
