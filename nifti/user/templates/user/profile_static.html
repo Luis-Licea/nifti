@@ -30,17 +30,22 @@
             <div style="text-align: left;">{{other_user.profile.body|safe}}</div>
         </div>
 
-        <!-- View All Ads by Author Button. -->
-        <a href="{% url 'user-post-list' other_user %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Ads by {{other_user}}</a>
-
         <!-- If the user who is logged in is the owner of the profile, allow reset password and delete account buttons. -->
         {% if other_user == user %}
+
+        <!-- View All My Ads Button. -->
+        <a href="{% url 'user-post-list' other_user %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">View My Ads</a>
 
         <!-- Reset Password Button. -->
         <a href="{% url 'password_reset' %}" class="btn btn-outline-info" style="display: block; margin-bottom: 0.5rem;" role="button">Reset Password</a>
 
         <!-- Delete Account Button. -->
         <a href="{% url 'home-unregister' %}" class="btn btn-outline-danger" style="display: block; margin-bottom: 0.5rem;" role="button">Delete Account</a>
+
+        {% else %}
+
+        <!-- View All Ads by Author Button. -->
+        <a href="{% url 'user-post-list' other_user %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Ads by {{other_user}}</a>
 
         {% endif %}
     </div>
