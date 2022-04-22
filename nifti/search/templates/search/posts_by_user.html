@@ -27,8 +27,8 @@
 
       <!-- Show link to first and previous pages. -->
       {% if page_obj.has_previous %}
-        <a class="btn btn-outline-primary" href="?page=1">First</a>
-        <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        <a class="btn btn-outline-primary" style="font-family: initial" href="?page=1">⏮</a>
+        <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">◄</a>
       {% endif %}
 
       <!-- Show link for the last two and the following two pages. -->
@@ -42,8 +42,8 @@
 
       <!-- Show link for the next and last pages. -->
       {% if page_obj.has_next %}
-        <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">Next</a>
-        <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">►</a>
+        <a class="btn btn-outline-primary" style="font-family: initial;" href="?page={{ page_obj.paginator.num_pages }}">⏭</a>
       {% endif %}
 
     {% endif %}
