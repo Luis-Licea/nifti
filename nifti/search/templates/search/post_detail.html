@@ -36,17 +36,22 @@
 
         </div>
 
-        <!-- View All Ads by Author Button. -->
-        <a href="{% url 'user-post-list' object.author %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Ads by {{object.author}}</a>
-
         <!-- Account Settings. -->
         {% if object.author == user %}
+
+        <!-- View All My Ads Button. -->
+        <a href="{% url 'user-post-list' object.author %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">View My Ads</a>
 
         <!-- Edit Post Button. -->
         <a href="{% url 'post-update' object.id %}" class="btn btn-outline-info" style="display: block; margin-bottom: 0.5rem;" role="button">Edit Post</a>
 
         <!-- Delete Post Button. -->
         <a href="{% url 'post-delete' object.id %}" class="btn btn-outline-danger" style="display: block; " role="button">Delete Post</a>
+
+        {% else %}
+
+        <!-- View All Ads by Author Button. -->
+        <a href="{% url 'user-post-list' object.author %}" class="btn btn-outline-primary" style="display: block; margin-bottom: 0.5rem;" role="button">Ads by {{object.author}}</a>
 
         {% endif %}
 
