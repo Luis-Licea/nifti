@@ -24,7 +24,7 @@ class Profile(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
 
     # The profile picture will be used on the profile and posts.
-    profile_picture = models.ImageField(default="profile_pictures/default.jpg", upload_to="profile_pictures")
+    profile_picture = models.ImageField(default="profile_pictures/default.png", upload_to="profile_pictures")
 
     # Modifies the profile picture to lower its resolution. We want to keep
     # profile pictures small in size.
