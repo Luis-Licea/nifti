@@ -24,8 +24,6 @@
           document.getElementById("search_button").disabled = false;
 
           // Remove location message to show search is ready.
-          // document.getElementById("location_msg").style.display = "none";
-
           document.getElementById("location_msg").innerHTML = ' \
             <h1>Nifti</h1> \
             <p class="lead"> \
@@ -33,8 +31,6 @@
             </p> \
             ';
 
-          // Hide the label (the element does not take space).
-          // document.getElementById("coordinate_status").style.display = "none";
         });
       } else{
         document.getElementById("location_msg").innerHTML = "This browser does not support HTML5 geolocation.";
