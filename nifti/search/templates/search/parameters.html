@@ -1,0 +1,20 @@
+{% block parameters %}
+{% comment %}
+<!-- Do not modify indentation, it will mess up the links in the pagination.html file. -->
+{% endcomment %}
+{% if search_latitude %}
+&search_latitude={{search_latitude}}
+{% endif %}
+{% if search_longitude %}
+&search_longitude={{search_longitude}}
+{% endif %}
+{% if search_string %}
+&search_string={{search_string}}
+{% endif %}
+{% if search_option %}
+&search_option={{search_option}}
+{% endif %}
+{% if search_by %}
+&search_by={{search_by}}
+{% endif %}
+{% endblock parameters %}
