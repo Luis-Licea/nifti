@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render
 from django.contrib import messages
+from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import (
   CreateView,
@@ -367,8 +368,14 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
   model = Post
+
   # Send the users to the home page when the deletion is successful.
-  success_url = '/'
+  # This is overwritten by get_success_url.
+  # success_url = '/'
+
+  def get_success_url(self):
+    # After deleting a post, resturn user to post list.
+    return reverse('user-post-list', kwargs={'username': self.request.user })
 
   def test_func(self):
     # Get post trying to be delted.
