@@ -36,7 +36,7 @@
   </script>
 
   <!-- Show that the coordinates are still loading. -->
-  <h3 class="text-muted" id="location_msg">
+  <h2 class="text-muted" style="margin: 1rem;" id="location_msg">
 
     <!-- Spinner. -->
     <div class="spinner-border" id="coordinate_status" role="coordinate_status" style="width: 1.5rem; height: 1.5rem;"></div>
@@ -44,7 +44,7 @@
     <!-- Loading message. -->
     Finding your location&hellip;
 
-  </h3>
+  </h2>
 
 {% else %}
   <script>
@@ -65,6 +65,13 @@
       method="GET"
       value=""
       >
+
+      {% if page_obj %}
+        <!-- Show number of results. -->
+        <h2 class="text-muted" style="margin: 2rem;">
+          Results ({{ page_obj.paginator.count }})
+        </h2>
+      {% endif %}
 
       <!-- Coordinates are empty by default. -->
       <input type="hidden" id="search_latitude" name="search_latitude" value="{{ search_latitude }}" />
@@ -133,46 +140,49 @@
           {% if not users %}
             <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
           {% else %}
-            {% for user in users %}
-              <!-- Concatenate the first and last name to create the full_name. -->
-              {% with user.first_name|add:' '|add:user.last_name as full_name %}
-                <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
-                  <div class="row g-0" style="margin-left: 0 !important;">
-                    <div class="col-md-4">
 
-                      <!-- User profile picture. -->
-                      <img
-                        src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
-                        alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
-                        class="img-fluid responsive"
-                      />
+            {% for user in page_obj %}
+              <div class="card mb-3 text-start" style="max-width: 540px; text-shadow: none !important; padding: 0px !important; min-height: 140px">
+                <div class="row g-0" style="margin-left: 0 !important;">
+                  <div class="col-md-4">
 
-                    </div>
-                    <div class="col-md-8">
-                      <div class="card-body">
+                    <!-- User profile picture. -->
+                    <img
+                      src="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                      alt="{{BASE_DIR}}/media/{{ user.profile.profile_picture }}"
+                      class="img-fluid responsive"
+                    />
 
-                        <!-- User profile link. -->
-                        <h5 class="card-title">
-                          <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' user %}">{{ user }}</a>
-                        </h5>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
 
-                        <!-- User profile creation date. -->
-                        <h6 class="card-subtitle mb-2 text-muted">
-                          {{ user.profile.date_created|date:"F d, Y" }}
-                        </h6>
 
-                        <!-- User profile title hyperlink. -->
-                        <p class="card-text">
-                          <a href="{% url 'user-static-profile' user %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
+                      <!-- User profile title link. -->
+                      <h5 class="card-title">
+                        <a href="{% url 'user-static-profile' user %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
                           {{ user.profile.title }}
-                          </a>
-                        </p>
+                        </a>
+                      </h5>
 
-                      </div>
+                      <h6 class="card-subtitle mb-2 text-muted">
+                        <!-- User profile link. -->
+                        <a class="mr-2" style="text-decoration: none;" href="{% url 'user-static-profile' user %}">{{ user }}</a>
+                        <!-- User profile creation date. -->
+                        {{ user.profile.date_created|date:"F d, Y" }}
+                      </h6>
+
+                      <!-- Post contents hyperlink. -->
+                      <p class="card-text">
+                          <a href="{% url 'user-static-profile' user %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: whitesmoke;">
+                              {{ user.profile.body|striptags|safe|truncatechars_html:200 }}
+                          </a>
+                      </p>
+
                     </div>
                   </div>
                 </div>
-              {% endwith %}
+              </div>
             {% endfor %}
           {% endif %}
         <!-- Service/Task based Search -->
@@ -181,15 +191,29 @@
             <p style="color:white;font-size:25px">No {{ search_type }}s found.</p>
           {% else %}
 
+            {% comment %}
             <!-- Loop thru every post and its tags. -->
             {% for post, tags, distance in posts_with_tags_and_distances %}
               <!-- Display the post. -->
               {% include 'search/post_result.html' %}
             {% endfor %}
+            {% endcomment %}
+
+            <!-- Loop thru every search result. -->
+            {% for result in page_obj %}
+              <!-- Obtain the post, tags, and distance from the list using indexes. -->
+              {% with post=result.0 tags=result.1 distance=result.2 %}
+                {% include 'search/post_result.html' %}
+              {% endwith %}
+            {% endfor %}
 
           {% endif %}
         {% endif %}
       </div>
+
+      <!-- Include pagination links. -->
+      {% include 'search/pagination.html' %}
+
     </div>
   </section>
 

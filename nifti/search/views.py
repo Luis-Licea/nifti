@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import (
   CreateView,
   DetailView,
@@ -202,7 +203,116 @@ def search(request):
       )
       context.update(service_or_task_context) #merge service/task's context with generic context
 
+  # Get the results.
+  if 'posts_with_tags_and_distances' in context.keys():
+    # Get advertisement post results.
+    object_list = context['posts_with_tags_and_distances']
+  elif 'users' in context.keys():
+    # Get user profile results.
+    object_list = context['users']
+  else:
+    # Create empty results list.
+    object_list=[]
+
+  # If search results exist:
+  if object_list:
+    # Show 5 posts in each page.
+    paginator = Paginator(object_list, 5)
+    # Get the page number from the URL.
+    page = request.GET.get('page')
+    try:
+        # Try to retrieve page.
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, then return first page.
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range, then return last page.
+        page_obj = paginator.page(paginator.num_pages)
+
+    # Save variables in context that will be passed down to template.
+    context.update({
+      # The page object stores the page results.
+      'page_obj': page_obj,
+      # Only show pagination links when there is more than 1 page.
+      'is_paginated': page_obj.has_other_pages()
+    })
+    print("\nContext:", context)
+
   return render(request, 'search/search.html', context)
+
+class SearchListView(ListView):
+  # model = Post
+  template_name = 'search/search.html'
+  # context_object_name = 'posts'
+  context_object_name = 'posts_with_tags_and_distances'
+
+  # The number of posts to show per page.
+  paginate_by = 2
+
+  def get(self, *args, **kwargs):
+    print('\nProcessing GET request')
+    resp = super().get(*args, **kwargs)
+    print('\nFinished processing GET request')
+    print(resp)
+    return resp
+
+  def get_queryset(self, **kwargs):
+
+    # Set empty list to prevent an error.
+    self.object_list = []
+    context = self.get_context_data()
+    # print('context data:', context)
+    return context['posts_with_tags_and_distances']
+    # posts = Post.objects.filter(Q(title__icontains=self.request.GET['search_string'])).order_by('-date_posted')
+    # return Post.objects.all()
+
+  def get_context_data(self, **kwargs):
+
+    # Get context from class view containing pagination variables.
+    context = super().get_context_data(**kwargs)
+
+    # Get context from request containing search parameters.
+    data = self.request.GET
+
+    # Print all the variables in the request.
+    print(f'\nSearch context: {data}\n')
+
+
+    # Verify that the search is not empty.
+    if(data and data['search_string']):
+
+      # Merge both contexts.
+      # context.update(data)
+
+      # Get either Service, Task, or User
+      context['search_option'] = data['search_option']
+      # Get search string from search bar if it exists, else get an empty string.
+      context['search_string'] = data['search_string'] if data['search_string'] else ""
+      # Get search by tag or title.
+      context['search_by'] = data['search_by']
+      # Get user's latitude.
+      context['search_latitude'] = data['search_latitude'] if data['search_latitude'] else ""
+      # Get user's longitude.
+      context['search_longitude'] = data['search_longitude'] if data['search_longitude'] else ""
+
+      if(context['search_option'] == "user"):
+        user_context = user_search(context['search_string'])
+        context.update(user_context) #merge user's context with generic context
+
+      elif(context['search_option'] == "service" or context['search_option'] == "task"):
+        service_or_task_context = service_or_task_search(
+          self.request,
+          context['search_latitude'],
+          context['search_longitude'],
+          context['search_string'],
+          context['search_by'],
+          context['search_option'],
+        )
+        context.update(service_or_task_context)
+
+    print('\ncombined context:', context)
+    return context
 
 class PostDetailView(DetailView):
   model = Post
