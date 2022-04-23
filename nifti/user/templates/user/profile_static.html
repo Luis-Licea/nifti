@@ -1,6 +1,9 @@
 {% extends 'home/base.html' %}
 <!-- Load needed css files. -->
 {% load static %}
+{% block title %}
+<title>{{ other_user }}</title>
+{% endblock title %}
 <!-- Needed to auto-format forms using the |cripsy function. -->
 {% load crispy_forms_tags %}
 <!-- Custom CSS -->
