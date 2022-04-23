@@ -45,6 +45,7 @@ class Profile(models.Model):
 
         # print("Image name:", self.profile_picture.name)
         # print("Image path:", self.profile_picture.path)
+        # print("Image previous name :", self.profile_picture_previous_name)
 
         # Delete the orphaned profile picture.
         self.delete_profile_picture(default_image)
@@ -68,8 +69,8 @@ class Profile(models.Model):
             img.save(self.profile_picture.path)
 
     def delete_profile_picture(self, default_image):
-        # Delete the profile picture if it is not the default picture.
-        if self.profile_picture_previous_name != default_image:
+        # Delete the profile picture if it is not the default picture, and the profile picture name has changed.
+        if self.profile_picture_previous_name != default_image and self.profile_picture != self.profile_picture_previous_name:
             print("Deleteing", self.profile_picture_previous_name)
 
             # Get storage access.
