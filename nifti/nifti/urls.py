@@ -26,9 +26,9 @@ from user import views as user_views
 
 
 urlpatterns = [
-    # path('', home_views.home, name='home-home'),
     path('', include('search.urls')),
-    path('login', auth_views.LoginView.as_view(template_name='home/login.html'), name='home-login'),
+    # path('login', auth_views.LoginView.as_view(template_name='home/login.html'), name='home-login'),
+    path('login', home_views.login, name='home-login'),
     path(
         'logout',
         auth_views.LogoutView.as_view(template_name='home/logout.html'),

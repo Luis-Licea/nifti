@@ -1,8 +1,10 @@
-from django.contrib.auth import forms, authenticate
+from django.contrib.auth import forms, authenticate, login as auth_login
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
+from user import views as user_views
+from axes.backends import AxesBackend
 
 members = [
   # Alex Palmer.
@@ -50,6 +52,26 @@ def about(request):
   return render(request, 'home/about.html', context)
 
 def login(request):
+  # Handle the POST request.
+  if request.POST:
+    # Get username and password.
+    username = request.POST['username']
+    password = request.POST['password']
+
+    user = authenticate(
+      # Important custom argument used by Django-Axes.
+      request=request,
+      username=username,
+      password=password,
+    )
+
+    # Verify that user exists and is active.
+    if user is not None and user.is_active:
+      # Login the user.
+      auth_login(request, user)
+      # Redirect user to profile page.
+      return redirect('user-profile')
+
   return render(request, 'home/login.html')
 
 def register(request):

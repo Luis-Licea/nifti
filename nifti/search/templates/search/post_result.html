@@ -11,7 +11,7 @@
                         </p>
                     {% endif %}
 
-                    <!-- User profile link. -->
+                    <!-- User profile title link. -->
                     <h5 class="card-title">
                         <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: white;">
                             {{ post.title }}
@@ -24,7 +24,7 @@
                         {{ post.date_posted|date:"F d, Y" }}
                     </h6>
 
-                    <!-- Post title hyperlink. -->
+                    <!-- Post contents hyperlink. -->
                     <p class="card-text">
                         <a href="{% url 'post-detail' post.id %}" style="top: 0; left: 0; height: 100%; width: 100%; text-decoration: none; color: whitesmoke;">
                             {{ post.body|striptags|safe|truncatechars_html:200 }}

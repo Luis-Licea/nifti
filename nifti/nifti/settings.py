@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # in the installed apps list.
 
 INSTALLED_APPS = [
+    'axes',
     'crispy_forms',
     'ckeditor',
     'user.apps.UserConfig',
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'nifti.urls'
@@ -108,6 +110,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -198,3 +207,17 @@ EMAIL_USE_TLS = True
 # Style all forms using Bootsrap.
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# Django-Axes settings.
+
+# Enable lockout.
+AXES_LOCK_OUT_AT_FAILURE = True
+# Gather info about user browser.
+AXES_USE_USER_AGENT = True
+# Cooloff time in hours.
+AXES_COOLOFF_TIME = 1
+# Failed attempts before lockout.
+AXES_FAILURE_LIMIT = 3
+# Reset failed attempts after successful login.
+AXES_RESET_ON_SUCCESS = True
+# Template to shown when locked out.
+AXES_LOCKOUT_TEMPLATE = 'home/lockout.html'
