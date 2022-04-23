@@ -43,9 +43,6 @@ members = [
 ]
 
 # Create your views here.
-def home(request):
-  return render(request, 'home/home.html')
-
 def about(request):
   context = {
     'members': members

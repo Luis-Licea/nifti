@@ -20,14 +20,21 @@
           // Store the longitude in the form element.
           document.getElementById("search_longitude").value = location.coords.longitude;
 
+          // Enable button when location is ready.
+          document.getElementById("search_button").disabled = false;
+
           // Remove location message to show search is ready.
-          document.getElementById("location_msg").style.display = "none";
+          // document.getElementById("location_msg").style.display = "none";
+
+          document.getElementById("location_msg").innerHTML = ' \
+            <h1>Nifti</h1> \
+            <p class="lead"> \
+              Nifti allows you to search for work or post work for others, opening a new market for freelancers that do in-person jobs. \
+            </p> \
+            ';
 
           // Hide the label (the element does not take space).
-          document.getElementById("coordinate_status").style.display = "none";
-
-          // Enable button when searching is ready.
-          document.getElementById("search_button").disabled = false;
+          // document.getElementById("coordinate_status").style.display = "none";
         });
       } else{
         document.getElementById("location_msg").innerHTML = "This browser does not support HTML5 geolocation.";
@@ -36,7 +43,7 @@
   </script>
 
   <!-- Show that the coordinates are still loading. -->
-  <h2 class="text-muted" style="margin: 1rem;" id="location_msg">
+  <h2 style="margin: 1rem;" id="location_msg">
 
     <!-- Spinner. -->
     <div class="spinner-border" id="coordinate_status" role="coordinate_status" style="width: 1.5rem; height: 1.5rem;"></div>

@@ -5,7 +5,6 @@
       <nav class="nav nav-masthead justify-content-center float-md-end">
 
         <!-- Get the urls for each link in the nav bar. -->
-        {% url 'home-home' as home %}
         {% url 'home-about' as about %}
         {% url 'user-profile' as profile %}
         {% url 'post-create' as create_post %}
@@ -15,8 +14,7 @@
         {% url 'search-home' as search %}
 
         <!-- Activate link in nav bar and add aria current for the current page. -->
-        <a class="nav-link{% if request.path == home %} active" aria-current="page" {% else %}"{% endif %} href="{{ home }}">Home</a>
-        <a class="nav-link{% if request.path == search %} active" aria-current="page" {% else %}"{% endif %} href="{{ search }}">Search</a>
+        <a class="nav-link{% if request.path == search %} active" aria-current="page" {% else %}"{% endif %} href="{{ search }}">Home</a>
         {% if user.is_authenticated %}
           <a class="nav-link{% if request.path == profile %} active" aria-current="page" {% else %}"{% endif %} href="{{ profile }}">Profile</a>
           <a class="nav-link{% if request.path == create_post %} active" aria-current="page" {% else %}"{% endif %} href="{{ create_post }}">New Ad</a>

@@ -54,7 +54,7 @@ def deleteuser(request):
         user = request.user
         user.delete()
         messages.info(request, 'Your account has been deleted.')
-        return redirect('home-home')
+        return redirect('search-home')
     else:
         delete_form = UserDeleteForm(instance=request.user)
 
