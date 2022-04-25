@@ -92,7 +92,6 @@ def get_post_distances(posts, request, search_lat, search_long):
   # Create empty distance list.
   distances = []
   for post in posts:
-    # TODO: Get current user so that following logic works.
     if(request.user.id != post.author_id and get_distance_between_coords(float(search_lat), float(search_long), post.latitude, post.longitude) == 0):
       distances.append("My Current Location.")
     else:
@@ -314,6 +313,22 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
   # The fields that need to be modified.
   fields = ['title', 'body', 'address', 'service_provider']
 
+  def get_context_data(self, *args, **kwargs):
+    context = super(PostUpdateView, self).get_context_data(*args, **kwargs)
+    #Getting tags from DB
+    self_post_id = self.get_object().id
+    post_to_tag_query_set = TagToPostTable.objects.filter(
+      Q(post_id=self_post_id)
+    )
+    post_tags = []
+    #get tags associated with post
+    for post_to_tag in post_to_tag_query_set:
+      post_tags.append(Tag.objects.get(Q(id=post_to_tag.tag_id)))
+    context['tags'] = post_tags
+    context['tag_count'] = len(post_tags)
+    context['update_post'] = True
+    return context
+
   def form_valid(self, form):
     """Validate address and assign author to post before updating it.
 
@@ -343,10 +358,40 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
       context = { 'form': form }
       return render(self.request, 'search/post_form.html', context)
 
-    # Make the form author be the user who is logged in and making the
-    # request.
-    form.instance.author = self.request.user
+    #Tag Operations---#
+    arr_tags = self.request.POST.get("tagsToModifyInput").split("+")
+    arr_tags.pop(0) #get rid of first empty '' element
+    #print(arr_tags)
 
+    #Remove deleted tags from TagToPostTable
+    tag_to_post_entries_for_post = TagToPostTable.objects.filter(Q(post_id=self.get_object().id))
+    for tag_to_post_entry in tag_to_post_entries_for_post:
+      #get name from tag table
+      temp_tag_name = Tag.objects.get(id=tag_to_post_entry.tag_id).tag_name
+      if(temp_tag_name not in arr_tags):
+        #waste the mf
+        tag_to_post_entry.delete()
+
+    #Add new tags.
+    for tag in arr_tags:
+      check_tag_id = -1
+      #create new entry in Tag table if tag does not exist
+      if(not Tag.objects.filter(Q(tag_name=tag))):
+        new_tag = Tag(tag_name=tag)
+        new_tag.save()
+        check_tag_id = new_tag.id
+      else:
+        print("tag name: " + str(tag))
+        check_tag_id = Tag.objects.get(Q(tag_name=tag)).id
+      #check if there is a tag_to_post entry for the specific tag
+      if(not TagToPostTable.objects.filter(Q(post_id= self.get_object().id) & Q(tag_id=check_tag_id))):
+        new_tag_to_post_table_entry = TagToPostTable(post_id= self.get_object().id,tag_id=check_tag_id)
+        new_tag_to_post_table_entry.save()
+    #End Tag Operations---#
+
+    # Make the form author be the user who is logged in and making the request.
+    form.instance.author = self.request.user
+    
     # Show a success message when the post is saved.
     messages.success(self.request, 'The post has been updated.')
     return super().form_valid(form)
