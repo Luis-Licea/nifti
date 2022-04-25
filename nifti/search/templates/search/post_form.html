@@ -48,6 +48,11 @@
       alert("'+' is not allowed in a tag.");
       return;
     }
+    // Dissallow tags with spaces ' '.
+    if (tagAddInput.indexOf(' ') != -1){
+      alert("Spaces are not allowed in tags.");
+      return;
+    }
     //add tag
     else if (tagAddInput != "" && tagAddInput != null && !tagExists(tagAddInput, tagsToMod.innerText)) {
       tagsToMod.innerHTML = tagsToMod.innerHTML + 
