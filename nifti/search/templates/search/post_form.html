@@ -7,12 +7,20 @@
 <script>
   window.onload = function onWindowLoadFunctions(){
     setTagsToModifyInput();
+    // Disable the add button if the tag limit is reached.
+    checkTagLimit();
+  }
+
+  // Place the given tag name in the text field.
+  function setTagInputValue(name) {
+    tagInput = document.getElementById('tagInput');
+    tagInput.value = name;
   }
 
   function setTagsToModifyInput(){
-    /* 
-    when using request.POST.get(nameOfElement), the element must be 
-    an input field. So using this input field. 
+    /*
+    when using request.POST.get(nameOfElement), the element must be
+    an input field. So using this input field.
     */
     document.getElementById("tagsToModifyInput").value = document.getElementById("tagsToModify").innerText.replace(/ /g,"");
   }
@@ -22,13 +30,13 @@
     Hide Add Tags section if user reaches tag limit of 10.
     */
     var tagCount = document.getElementsByClassName("modifyAddTag").length;
-    if(tagCount<10) document.getElementById("addTagSection").style.display="inline";
+    if(tagCount<10) document.getElementById("addTagButton").style.display="inline";
     else {
       if(section == 'add') alert("Maximum tag count is 10.");
-      document.getElementById("addTagSection").style.display="none";
+      document.getElementById("addTagButton").style.display="none";
     }
   }
-  
+
   function tagExists(tag,stringTags){
     const str = stringTags.replace(/ /g,"");
     const arrTags = str.split(/[+]/);
@@ -39,52 +47,52 @@
   }
 
   function addTag(){
-    var tagAddInput = document.getElementById('tagAddInput').value;
+    var tagInput = document.getElementById('tagInput').value;
     var tagsToMod = document.getElementById('tagsToModify');
     //dissallow tags with '+'.
     //can add more rules for tag entering here
-    if (tagAddInput.indexOf('+') != -1){
+    if (tagInput.indexOf('+') != -1){
       alert("'+' is not allowed in a tag.");
       return;
     }
     // Dissallow tags with spaces ' '.
-    if (tagAddInput.indexOf(' ') != -1){
+    if (tagInput.indexOf(' ') != -1){
       alert("Spaces are not allowed in tags.");
       return;
     }
     //add tag
-    else if (tagAddInput != "" && tagAddInput != null && !tagExists(tagAddInput, tagsToMod.innerText)) {
-      tagsToMod.innerHTML = tagsToMod.innerHTML + 
-      '<span type="button" class="modifyAddTag" style="border: 1px solid black; border-radius:25px; padding: 6px 12px; display: inline-block;">+' +
-        tagAddInput + 
+    else if (tagInput != "" && tagInput != null && !tagExists(tagInput, tagsToMod.innerText)) {
+      tagsToMod.innerHTML = tagsToMod.innerHTML +
+      '<span type="button" onclick="setTagInputValue(' + "'" + tagInput + "'" + ')" class="modifyAddTag" style="border: 1px solid black; border-radius:25px; padding: 6px 12px; display: inline-block;">+' +
+        tagInput +
       '</span>';
     }
     //tag exists
-    else if (tagAddInput != "" && tagAddInput != null && tagExists(tagAddInput, tagsToMod.innerText)) {
-      alert("Tag: [" + tagAddInput + "] already exists.");
+    else if (tagInput != "" && tagInput != null && tagExists(tagInput, tagsToMod.innerText)) {
+      alert("Tag: [" + tagInput + "] already exists.");
     }
     setTagsToModifyInput();
   }
 
   function removeTag(){
-    var tagRemoveInput = document.getElementById('tagRemoveInput').value;
+    var tagInput = document.getElementById('tagInput').value;
     var tagsToMod = document.getElementById('tagsToModify');
     const modifyAddTags = document.getElementsByClassName("modifyAddTag");
-    //dissallow tags with '+'. 
+    //dissallow tags with '+'.
     //can add more rules for tag entering here
-    if (tagRemoveInput.indexOf('+') != -1){
+    if (tagInput.indexOf('+') != -1){
       alert("'+' is not allowed in a tag.");
       return;
     }
     //remove tag
-    else if (tagRemoveInput != "" && tagRemoveInput != null && tagExists(tagRemoveInput, tagsToMod.innerText)) {
+    else if (tagInput != "" && tagInput != null && tagExists(tagInput, tagsToMod.innerText)) {
       for (var i=0; i<modifyAddTags.length; i++){
-        if (modifyAddTags[i].innerText.replace(/ /g,"") == '+'+tagRemoveInput) modifyAddTags[i].remove();
+        if (modifyAddTags[i].innerText.replace(/ /g,"") == '+'+tagInput) modifyAddTags[i].remove();
       }
     }
     //tag does not exist
-    else if (tagRemoveInput != "" && tagRemoveInput != null && !tagExists(tagRemoveInput, tagsToMod.innerText)){
-      alert("Tag: [" + tagRemoveInput + "] does not exist.");
+    else if (tagInput != "" && tagInput != null && !tagExists(tagInput, tagsToMod.innerText)){
+      alert("Tag: [" + tagInput + "] does not exist.");
     }
     setTagsToModifyInput();
   }
@@ -113,31 +121,25 @@
           <!-- Tags -->
           {% if update_post %}
             <div style="text-align:left;">
-              <p style="font-size:20px; margin: 20px 0;">Tags</p>
               <!-- Add Tags -->
               <!-- Only up to 10 tags per post -->
               <div id="addTagSection" name="addTagSection">
-                <p style="margin: 0;">Add tags to post:</p>
+                <p style="margin: 0;">Tag name</p>
                 <div class="input-group">
-                  <input class="form-control" type="label" id="tagAddInput" name="tagAddInput" maxlength="20">
-                  <span class="btn btn-primary" type="button" onclick="addTag();checkTagLimit('add');">Add Tag</span>
-                </div>
-              </div>
-              <!-- Remove Tags -->
-              <div id="removeTagSection" name="removeTagSection">
-                <p style="margin: 0;">Remove tags from post:</p>
-                <div class="input-group">
-                  <input class="form-control" type="label" id="tagRemoveInput" name="tagRemoveInput" maxlength="20">
-                  <span class="btn btn-primary" type="button" onclick="removeTag();checkTagLimit('remove');">Remove Tag</span>
+                  <input class="form-control" type="label" id="tagInput" name="tagInput" maxlength="20">
+                  <!-- Add Tag Button. -->
+                  <span id="addTagButton" class="btn btn-primary" type="button" onclick="addTag();checkTagLimit('add');">Add</span>
+                  <!-- Remove Tag Button. -->
+                  <span class="btn btn-danger" type="button" onclick="removeTag();checkTagLimit('remove');">Remove</span>
                 </div>
               </div>
               <!-- Tag Modifications will be completed after the post is saved. -->
               <!-- Have to use an input field bc Django can only see input HTML fields in request.POST. Keep hidden so users cannot modify. -->
               <input type="label" id="tagsToModifyInput" name="tagsToModifyInput" style="display:none;">
-              <p style="margin: 0;">Tags:</p>
+              <p style="margin: 0;">Tags</p>
               <div id="tagsToModify" name="tagsToModify">
                 {% for tag in tags %}
-                  <span type="button" class="modifyAddTag" style="border: 1px solid black; border-radius:25px; padding: 6px 12px; display: inline-block">+{{ tag.tag_name }}</span>
+                  <span type="button" onclick="setTagInputValue('{{tag.tag_name}}')" class="modifyAddTag" style="border: 1px solid black; border-radius:25px; padding: 6px 12px; display: inline-block">+{{ tag.tag_name }}</span>
                 {% endfor %}
               </div>
               <br>
@@ -146,7 +148,7 @@
           {% else %}
             <p style="color:red">Posts can only add tags after creation.</p>
           {% endif %}
-          <button type="submit" class="btn btn-primary">Post</button>          
+          <button type="submit" class="btn btn-primary">Post</button>
         </div>
       </div>
       <!-- View All Ads by Author Button. -->
