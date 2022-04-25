@@ -40,7 +40,6 @@
 
   function addTag(){
     var tagAddInput = document.getElementById('tagAddInput').value;
-    var tagsString = document.getElementById('id_tags_string'); 
     var tagsToMod = document.getElementById('tagsToModify');
     //dissallow tags with '+'.
     //can add more rules for tag entering here
@@ -56,7 +55,7 @@
     //add tag
     else if (tagAddInput != "" && tagAddInput != null && !tagExists(tagAddInput, tagsToMod.innerText)) {
       tagsToMod.innerHTML = tagsToMod.innerHTML + 
-      '<span type="button" class="modifyAddTag" style="border: 2px solid black; background:#99ff99;border-radius:5px;">+' +
+      '<span type="button" class="modifyAddTag" style="border: 1px solid black; border-radius:25px; padding: 6px 12px; display: inline-block;">+' +
         tagAddInput + 
       '</span>';
     }
@@ -113,28 +112,32 @@
           <br>
           <!-- Tags -->
           {% if update_post %}
-            <div style="padding-left:20px; text-align:left;border: 5px solid black;">
-              <p style="text-align: center; padding-right:20px; font-size:20px">Tags</p>
+            <div style="text-align:left;">
+              <p style="font-size:20px; margin: 20px 0;">Tags</p>
               <!-- Add Tags -->
               <!-- Only up to 10 tags per post -->
               <div id="addTagSection" name="addTagSection">
-                <p>Add tags to post:</p>
-                <input type="label" id="tagAddInput" name="tagAddInput" maxlength="20">
-                <span type="button" onclick="addTag();checkTagLimit('add');" style="border: 2px solid blue; padding:2px; border-radius:5px;">Add Tag</span>
+                <p style="margin: 0;">Add tags to post:</p>
+                <div class="input-group">
+                  <input class="form-control" type="label" id="tagAddInput" name="tagAddInput" maxlength="20">
+                  <span class="btn btn-primary" type="button" onclick="addTag();checkTagLimit('add');">Add Tag</span>
+                </div>
               </div>
               <!-- Remove Tags -->
               <div id="removeTagSection" name="removeTagSection">
-                <p style="padding-top: 10px;">Remove tags from post:</p>
-                <input type="label" id="tagRemoveInput" name="tagRemoveInput" maxlength="20">
-                <span type="button" onclick="removeTag();checkTagLimit('remove');" style="border: 2px solid blue; padding:2px; border-radius:5px;">Remove Tag</span>
+                <p style="margin: 0;">Remove tags from post:</p>
+                <div class="input-group">
+                  <input class="form-control" type="label" id="tagRemoveInput" name="tagRemoveInput" maxlength="20">
+                  <span class="btn btn-primary" type="button" onclick="removeTag();checkTagLimit('remove');">Remove Tag</span>
+                </div>
               </div>
               <!-- Tag Modifications will be completed after the post is saved. -->
               <!-- Have to use an input field bc Django can only see input HTML fields in request.POST. Keep hidden so users cannot modify. -->
               <input type="label" id="tagsToModifyInput" name="tagsToModifyInput" style="display:none;">
-              <p>Tags:</p>
-              <div id="tagsToModify" name="tagsToModify" style="background:grey; height:100px; width:200px; overflow: auto;">
+              <p style="margin: 0;">Tags:</p>
+              <div id="tagsToModify" name="tagsToModify">
                 {% for tag in tags %}
-                  <span type="button" class="modifyAddTag" style="border: 2px solid black; background:#99ff99;border-radius:5px;">+{{ tag.tag_name }}</span>
+                  <span type="button" class="modifyAddTag" style="border: 1px solid black; border-radius:25px; padding: 6px 12px; display: inline-block">+{{ tag.tag_name }}</span>
                 {% endfor %}
               </div>
               <br>
