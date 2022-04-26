@@ -12,35 +12,35 @@ members = [
     'first': 'Alex',
     'middle': '',
     'last': 'Palmer',
-    'description': 'Computer Science student',
+    'description': 'I am interested in working in IT and related fields. See my <a href="https://www.linkedin.com/in/alex-palmer-686625238/" style="color: #d63384; text-decoration: none;"><code>LinkedIn</code></a>',
   },
   # Ameen El-Rasheedy
   {
     'first': 'Ameen',
     'middle': '',
     'last': 'El-Rasheedy',
-    'description': 'Computer Science student',
+    'description': 'I enjoy learning new things relating to software development and telecommunications. You can visit my <a href="https://www.linkedin.com/in/ameen-el-rasheedy-9965a6137/" style="color: #d63384; text-decoration: none;"><code>LinkedIn</code></a>.',
   },
   # Davina Robinson
   {
     'first': 'Davina',
     'middle': '',
     'last': 'Robinson',
-    'description': 'Computer Science student',
+    'description': 'I enjoy working with web design languages such as PHP C#, and HTML 5 and CSS. Here is my <a href="https://www.linkedin.com/mwlite/in/davina-robinson-b3455b189" style="color: #d63384; text-decoration: none;"><code>LinkedIn</code></a>.',
   },
   # Fernando Cruz
   {
     'first': 'Fernando',
     'middle': '',
     'last': 'Cruz',
-    'description': 'Computer Science student',
+    'description': 'I enjoy playing around with game design using Unity and hope to find employment as a game developer or a web developer. Check out my <a href="https://www.linkedin.com/in/fernando-cruz-32b02520a/" style="color: #d63384; text-decoration: none;"><code>LinkedIn</code></a> profile.',
   },
   # Luis David Licea Torres
   {
     'first': 'Luis',
     'middle': 'David',
     'last': 'Licea Torres',
-    'description': 'Computer Science student, GitHub account is <code>github.com/luis-licea/</code>',
+    'description': 'I am a computer scientist. I am intersted in software and web development. Check out my personal website <code><a href="https://luisliceatorres.com" style="color: #d63384; text-decoration: none;">luisliceatorres.com</a></code> and my <a href="https://github.com/luis-licea/" style="color: #d63384; text-decoration: none;"><code>GitHub</code></a> account.'
   },
 ]
 
