@@ -33,7 +33,7 @@
 
                     <!-- Multiple tags per each post -->
                     {% for tag in tags %}
-                        <a href="{% url 'search-home' %}?search_latitude={{ search_latitude }}&search_longitude={{ search_longitude }}&search_string={{ tag.tag_name }}&search_option={{ search_option }}&search_by={{ search_by }}" style="text-decoration: none;">
+                        <a href="{% url 'search-home' %}?search_latitude={{ search_latitude }}&search_longitude={{ search_longitude }}&search_string={{ tag.tag_name }}&search_option={{ search_option }}&search_by=tag" style="text-decoration: none;">
 
                             <button class="btn" style="border-radius: 25px;" >{{ tag.tag_name }}</button>
                         </a>
