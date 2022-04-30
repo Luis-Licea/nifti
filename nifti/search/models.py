@@ -6,6 +6,7 @@ from ckeditor.fields import RichTextField
 from user.models import Profile
 from django.urls import reverse
 
+#Ameen
 # Create your models here.
 class Post(models.Model):
     # Associates a post to a profile
@@ -35,11 +36,13 @@ class Post(models.Model):
         # Return the full URL path to a post.
         return reverse('post-detail', kwargs={'pk': self.pk})
 
+#Ameen
 #TODO: make a function add_tags() whenever a user submits/creates a post (Use signals in signals.py)
 class Tag(models.Model):
     #TODO: frontend feature preventing entering more than 20 chars per tag.
     tag_name = models.CharField(max_length=20)
 
+#Ameen
 #this class prevents duplicates in the Tag table
 class TagToPostTable(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)

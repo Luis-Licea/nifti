@@ -5,6 +5,7 @@ from search.models import Post
 from search.distance_calculation import get_coords_by_addr
 from django.db.models import signals
 
+#Ameen
 #when a post receives the post_save signal, do this
 @receiver(post_save, sender=Post)
 def update_coordinates(sender, instance, **kwargs):

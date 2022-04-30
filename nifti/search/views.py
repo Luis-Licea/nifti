@@ -17,6 +17,7 @@ from user.models import Profile
 from .distance_calculation import get_distance_between_coords, check_address_valid
 import numpy
 
+#Ameen
 #-- User
 def user_search(search_string):
   users = User.objects.filter(Q(username__icontains=search_string))
@@ -27,6 +28,7 @@ def user_search(search_string):
   }
   return user_context
 
+#Ameen
 def get_posts_from_tag_name(search_string, search_option):
   """Gets the posts associated to the tag in the search string.
 
@@ -55,6 +57,7 @@ def get_posts_from_tag_name(search_string, search_option):
       )
   return posts
 
+#Ameen
 def get_post_tags(posts):
   """Returns a 2-dimensional array of post tags. Each tag list corresponds to a
   post that was passed in. For example:
@@ -82,6 +85,7 @@ def get_post_tags(posts):
     post_tags.append(temp_tags_from_post)
   return post_tags
 
+#Ameen,Luis
 def get_post_distances(posts, request, search_lat, search_long):
   """Returns the distance associated to each post in the list. The distances are
   in the same order as the posts.
@@ -100,13 +104,14 @@ def get_post_distances(posts, request, search_lat, search_long):
   #get distance list
   return distances
 
-def get_posts_from_title(search_string, search_option):
+def get_posts_from_title(search_string, search_option): #Luis
   # Determine if search is for service provider.
   is_service_provider: bool = 1 if search_option == "service" else 0
   # Filter the posts using the title and service provider values.
   return Post.objects.filter(Q(title__icontains=search_string) &
                               Q(service_provider=is_service_provider))
 
+#Ameen
 #-- Service or Task
 def service_or_task_search(request, search_lat, search_long, search_string, search_by, search_option):
 
@@ -162,6 +167,7 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
   }
   return service_or_task_context
 
+#Ameen, Luis
 #-- Generic
 def search(request):
   # Print all the variables in the request.
@@ -241,6 +247,7 @@ def search(request):
 
   return render(request, 'search/search.html', context)
 
+#Luis
 class PostDetailView(DetailView):
   model = Post
 
@@ -249,6 +256,7 @@ class PostDetailView(DetailView):
   # '<app>/<model>_detail.html'.
   # template_name = 'search/post_detail.html'
 
+#Luis
 class PostCreateView(LoginRequiredMixin, CreateView):
   """The class inherits the LoginRequiredMixin because the user must be logged
   in before creating advertisement posts, and we cannot use the @login_required
@@ -305,7 +313,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     messages.success(self.request, 'The post has been created.')
     return super().form_valid(form)
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#Luis, Ameen
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): #Luis
   """The class inherits from UserPassesTestMixin because only the author of a post should be able to edit the post. Without this, anybody who is logged in can edit the post.
   """
   model = Post
@@ -411,6 +420,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
       return True
     return False
 
+#Luis
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
   model = Post
 
