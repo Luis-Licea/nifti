@@ -47,8 +47,20 @@ def profile(request):
   }
   return render(request, 'user/profile.html', context)
 
+# Alex
 @login_required
 def deleteuser(request):
+    """The view deletes the user who is logged in and returns a success message
+    when the user is deleted.
+
+    Args:
+        request: The request generated when the user clicks the "delete user"
+        button.
+
+    Returns:
+        view: The html page shown after deleting the account showing a success
+        message.
+    """
     if request.method == 'POST':
         delete_form = UserDeleteForm(request.POST, instance=request.user)
         user = request.user
@@ -76,7 +88,16 @@ def profile_detail(request, username):
     }
     return render(request, 'user/profile_static.html', context)
 
+# Luis
 class PostListView(ListView):
+  """Display all the posts created by a user.
+
+  Args:
+      ListView: The parent class that takes care of pagination.
+
+  Returns:
+      view: The html page showing the advertisements created by a user.
+  """
   model = Post
   template_name = 'search/posts_by_user.html'
   context_object_name = 'posts'

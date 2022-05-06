@@ -12,6 +12,7 @@ default_image_name = 'default.png'
 default_image_dir = 'profile_pictures/'
 default_image = default_image_dir + default_image_name
 
+# Ameen: Profile database model.
 # Create your models here.
 class Profile(models.Model):
 
@@ -37,6 +38,7 @@ class Profile(models.Model):
     # deleted after it is orphaned.
     profile_picture_previous_name = models.CharField(max_length=256, default=default_image)
 
+    # Luis: Save and delete_profile_picture functions.
     # Modifies the profile picture to lower its resolution. We want to keep
     # profile pictures small in size.
     def save(self, *args, **kwargs):

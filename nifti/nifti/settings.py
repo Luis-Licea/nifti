@@ -155,6 +155,7 @@ LOGIN_REDIRECT_URL = 'user-profile'
 
 LOGIN_URL = 'home-login'
 
+# Luis
 # Customize all the buttons available in the rich text editor.
 CKEDITOR_CONFIGS = {
     'default': {
@@ -188,6 +189,7 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+# Fernando
 # Allows users to sign in to their gmail through Django
 # Add the following lines at the end of the file <project>/env/bin/activate when
 # working locally or /etc/apache2/envvars when using a production server.
@@ -207,8 +209,8 @@ EMAIL_USE_TLS = True
 # Style all forms using Bootsrap.
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# Fernando
 # Django-Axes settings.
-
 # Enable lockout.
 AXES_LOCK_OUT_AT_FAILURE = True
 # Gather info about user browser.

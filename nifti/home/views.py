@@ -45,13 +45,18 @@ members = [
 ]
 
 # Create your views here.
+# Alex
 def about(request):
+  # show member info
+  """ show member info"""
   context = {
     'members': members
   }
   return render(request, 'home/about.html', context)
 
+# Luis
 def login(request):
+  """Handle user login."""
   # Handle the POST request.
   if request.POST:
     # Get username and password.
@@ -74,6 +79,7 @@ def login(request):
 
   return render(request, 'home/login.html')
 
+# Luis
 def register(request):
   if request.method == 'POST':
     # Create registration form.

@@ -7,6 +7,7 @@ from django.forms.forms import Form
 from user.models import Profile
 from ckeditor.fields import RichTextField
 
+# Fernando
 class UserRegistrationForm(UserCreationForm):
     """Create user registration form.
 
@@ -90,6 +91,7 @@ class UserRegistrationForm(UserCreationForm):
         )
         return user
 
+# Fernando
 class UserUpdateForm(forms.ModelForm):
     """Allow users to change their username and email. """
 
@@ -129,6 +131,7 @@ class UserUpdateForm(forms.ModelForm):
         # The form should only modify the following fields of the model.
         fields = ['username', 'email']
 
+# Fernando
 class ProfileUpdateForm(forms.ModelForm):
     """Allow users to change their profile title, body, and profile picture.
     """

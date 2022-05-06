@@ -85,7 +85,7 @@ def get_post_tags(posts):
     post_tags.append(temp_tags_from_post)
   return post_tags
 
-#Ameen,Luis
+#Ameen
 def get_post_distances(posts, request, search_lat, search_long):
   """Returns the distance associated to each post in the list. The distances are
   in the same order as the posts.
@@ -104,7 +104,8 @@ def get_post_distances(posts, request, search_lat, search_long):
   #get distance list
   return distances
 
-def get_posts_from_title(search_string, search_option): #Luis
+# Luis
+def get_posts_from_title(search_string, search_option):
   # Determine if search is for service provider.
   is_service_provider: bool = 1 if search_option == "service" else 0
   # Filter the posts using the title and service provider values.
@@ -167,7 +168,8 @@ def service_or_task_search(request, search_lat, search_long, search_string, sear
   }
   return service_or_task_context
 
-#Ameen, Luis
+#Ameen: Search functionality by user, service, or task.
+# Luis: Results pagination. Only 5 results shown per page.
 #-- Generic
 def search(request):
   # Print all the variables in the request.
@@ -322,6 +324,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): #Luis
   # The fields that need to be modified.
   fields = ['title', 'body', 'address', 'service_provider']
 
+  # Ameen
   def get_context_data(self, *args, **kwargs):
     context = super(PostUpdateView, self).get_context_data(*args, **kwargs)
     #Getting tags from DB
@@ -338,6 +341,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): #Luis
     context['update_post'] = True
     return context
 
+  # Ameen: Search tag operations.
+  # Luis: Address validation.
   def form_valid(self, form):
     """Validate address and assign author to post before updating it.
 
@@ -400,11 +405,12 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): #Luis
 
     # Make the form author be the user who is logged in and making the request.
     form.instance.author = self.request.user
-    
+
     # Show a success message when the post is saved.
     messages.success(self.request, 'The post has been updated.')
     return super().form_valid(form)
 
+  # Luis
   def test_func(self):
     """The function is inherited from UserPassesTestMixin. The post can only be
     updated if the function returns True.
@@ -420,7 +426,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): #Luis
       return True
     return False
 
-#Luis
+# Luis
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
   model = Post
 
@@ -428,10 +434,12 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
   # This is overwritten by get_success_url.
   # success_url = '/'
 
+  # Luis
   def get_success_url(self):
     # After deleting a post, resturn user to post list.
     return reverse('user-post-list', kwargs={'username': self.request.user })
 
+  # Luis
   def test_func(self):
     # Get post trying to be delted.
     post = self.get_object()

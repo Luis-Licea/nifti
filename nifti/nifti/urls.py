@@ -34,6 +34,8 @@ urlpatterns = [
         auth_views.LogoutView.as_view(template_name='home/logout.html'),
         name='home-logout'
     ),
+
+    # Fernando: Resetting passwords.
     path(
         'password-reset/',
         auth_views.PasswordResetView.as_view(template_name='home/password_reset.html'),
@@ -54,9 +56,13 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name='home/password_reset_complete.html'),
         name='password_reset_complete'
     ),
+
+
     path('profile', user_views.profile, name='user-profile'),
     path('user/', include('user.urls')),
     path('register', home_views.register, name='home-register'),
+
+    # Alex: Deleting user account.
     path('unregister', user_views.deleteuser, name='home-unregister'),
     path('about', home_views.about, name='home-about'),
     path('admin/', admin.site.urls),
